@@ -43,7 +43,7 @@ public class SearchController extends MVCPortlet {
 
 		IndexSearcher searcher = new IndexSearcher();
 		List<Document> result = searcher.search(request, pattern);
-		List<ResultModel> resultModelList = Utils.convertResult(result, request);
+		List<ResultModel> resultModelList = Utils.convertResult(result, request, response);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(response.getWriter(), resultModelList);

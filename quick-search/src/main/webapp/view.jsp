@@ -148,9 +148,9 @@
 						empty : [ '<div class="empty-message">',
 								'No asset found', '</div>' ].join('\n'),
 						suggestion : function(result) {
-							return "<a href='" + result.displayUrl + "'>"
-									+ result.title + " " + result.assetType
-									+ "</a>";
+							return "<a href='" + result.displayUrl + "'><span class='title'>"
+									+ result.title + "</span> | <i>" + result.assetType
+									+ "</i></a>";
 						}
 					},
 					source : ajaxAutocompleteSearch()

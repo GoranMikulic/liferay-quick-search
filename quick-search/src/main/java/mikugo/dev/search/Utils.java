@@ -5,12 +5,16 @@ import java.util.List;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Indexer;
@@ -31,15 +35,16 @@ import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
+import com.liferay.util.portlet.PortletRequestUtil;
 
 public class Utils {
 
 	public static final String JOURNAL_ARTICLE = "com.liferay.portlet.journal.model.JournalArticle";
 	public static final String USER = "com.liferay.portal.model.User";
 	public static final String FILE = "com.liferay.portlet.documentlibrary.model.DLFileEntry";
-	
+
 	private static Log log = LogFactoryUtil.getLog(Utils.class);
-	
+
 	public static ThemeDisplay getThemeDisplay(PortletRequest request) {
 		if (null == request) {
 			throw new IllegalArgumentException("request is null");
@@ -49,7 +54,8 @@ public class Utils {
 	}
 
 	public static List<ResultModel> convertResult(List<Document> result,
-			ResourceRequest request) throws Exception {
+			ResourceRequest request, ResourceResponse response)
+			throws Exception {
 		List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
 		for (Document document : result) {
@@ -117,20 +123,23 @@ public class Utils {
 					viewFullContentURL.setParameter("urlTitle",
 							assetRenderer.getUrlTitle());
 				}
-
-				if (!assetEntry.isVisible()) {
+				boolean viewInContext = true;
+				if (viewInContext || !assetEntry.isVisible()) {
 					boolean inheritRedirect = true;
 
-					// String viewFullContentURLString = viewFullContentURL
-					// .toString();
-					//
-					// viewFullContentURLString = HttpUtil.setParameter(
-					// viewFullContentURLString, "redirect", currentURL);
-					//
-					// viewURL = assetRenderer.getURLViewInContext(
-					// liferayPortletRequest, liferayPortletResponse,
-					// viewFullContentURLString);
-					log.info("assetEntry.isnotvisbile " + assetEntry.getTitle() + " " + assetEntry.getClassName());
+					String viewFullContentURLString = viewFullContentURL
+							.toString();
+
+					viewFullContentURLString = HttpUtil.setParameter(
+							viewFullContentURLString, "redirect",
+							getThemeDisplay(request).getURLCurrent());
+
+					viewURL = assetRenderer.getURLViewInContext(
+							(LiferayPortletRequest) request,
+							(LiferayPortletResponse) response,
+							viewFullContentURLString);
+					log.info("assetEntry.isnotvisbile " + assetEntry.getTitle()
+							+ " " + assetEntry.getClassName());
 				} else {
 					viewURL = viewFullContentURL.toString();
 				}
@@ -166,6 +175,13 @@ public class Utils {
 						.getThemeDisplay(request).getLocale());
 			}
 
+			if ((assetRendererFactory == null)) {
+				viewURL = viewFullContentURL.toString();
+			}
+
+			viewURL = checkViewURL(getThemeDisplay(request), viewURL,
+					getThemeDisplay(request).getURLCurrent(), true);
+
 			ResultModel model = new ResultModel();
 			model.setTitle(entryTitle);
 			model.setSummary(entrySummary);
@@ -176,6 +192,7 @@ public class Utils {
 			// Indexer indexer = IndexerRegistryUtil.getIndexer(className);
 
 		}
+
 		return resultModelList;
 	}
 
@@ -189,6 +206,22 @@ public class Utils {
 		} else {
 			return "";
 		}
+	}
+
+	private static String checkViewURL(ThemeDisplay themeDisplay,
+			String viewURL, String currentURL, boolean inheritRedirect) {
+		if (Validator.isNotNull(viewURL)
+				&& viewURL.startsWith(themeDisplay.getURLPortal())) {
+			viewURL = HttpUtil.setParameter(viewURL, "inheritRedirect",
+					inheritRedirect);
+
+			if (!inheritRedirect) {
+				viewURL = HttpUtil
+						.setParameter(viewURL, "redirect", currentURL);
+			}
+		}
+
+		return viewURL;
 	}
 
 	private static PortletURL getViewFullContentURL(ResourceRequest request,

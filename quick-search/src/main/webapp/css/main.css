@@ -3,6 +3,10 @@
 	background-color: white;
 }
 
+.tt-dropdown-menu .title {
+	font-size: 1.2em;
+}
+
 .tt-cursor {
-	background-color: #555;
+	background-color: #efefef;
 }
