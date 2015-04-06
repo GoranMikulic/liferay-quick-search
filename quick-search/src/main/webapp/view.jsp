@@ -20,10 +20,6 @@
 <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
 <portlet:defineObjects />
 
-This is the
-<b>quick-search</b>
-.
-
 <portlet:resourceURL var="getUsers">
 	<portlet:param name="<%=Constants.CMD%>" value="get_users" />
 </portlet:resourceURL>
@@ -56,7 +52,7 @@ $(document).ready(function() {
 
 function autocompleteAjax(ajaxURL, inputField, minLetters) {
 
-	var autocompleteName = "contacts";
+	var autocompleteName = "results";
 
 	// Cache for the results
 	var searchCache = [];
@@ -79,11 +75,10 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 
 		var match = false;
 
-		$.each(searchCache, function(i, contact) {
+		$.each(searchCache, function(i, result) {
 
-			if (substrRegex.test(contact.firstname)
-			|| substrRegex.test(contact.name)
-			|| substrRegex.test(contact.firstname + " " + contact.name)) {
+			if (substrRegex.test(result.assetType)
+			|| substrRegex.test(result.summary)) {
 				match = true;
 			}
 		});
@@ -97,11 +92,10 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 	var sortResults = function(pattern) {
 		var matches = [];
 		var substrRegex = new RegExp(pattern, 'i');
-		$.each(searchCache, function(i, contact) {
-			if (substrRegex.test(contact.firstname)
-			|| substrRegex.test(contact.name)
-			|| substrRegex.test(contact.firstname + " " + contact.name)) {
-				matches.push(contact);
+		$.each(searchCache, function(i, result) {
+			if (substrRegex.test(result.assetType)
+			|| substrRegex.test(result.summary)) {
+				matches.push(result);
 			}
 
 		});
@@ -125,10 +119,10 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 					data : {
 						pattern : searchPattern
 					},
-					success : function(contacts) {
+					success : function(results) {
 						// To stock the results in the cache
-						searchCache = searchCache.concat(contacts);
-						comboBox(contacts);// To display the suggestions
+						searchCache = searchCache.concat(results);
+						comboBox(results);// To display the suggestions
 					}
 				});
 			} else {
@@ -150,10 +144,9 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 				displayKey : 'email',
 				templates : {
 					empty : [ '<div class="empty-message">',
-							'No contact found', '</div>' ].join('\n'),
-					suggestion : function(contact) {
-						return contact.firstname + " " + contact.name
-								+ " (" + contact.email + ")";
+							'No asset found', '</div>' ].join('\n'),
+					suggestion : function(result) {
+						return "<a href='" + result.displayUrl + "'>" + result.title + " " + result.assetType + "</a>";
 					}
 				},
 				source : ajaxAutocompleteSearch()
