@@ -25,8 +25,8 @@ public class IndexSearcher {
 		Indexer indexer = FacetedSearcher.getInstance();
 		SearchContext searchContext = new SearchContext();
 
-		String[] entryClassNames = { Utils.JOURNAL_ARTICLE,
-				Utils.USER, Utils.FILE};
+		String[] entryClassNames = { Utils.MODEL_JOURNAL_ARTICLE,
+				Utils.MODEL_USER, Utils.MODEL_FILE };
 		
 		searchContext.setEntryClassNames(entryClassNames);
 		Facet assetEntriesFacet = new AssetEntriesFacet(searchContext);
