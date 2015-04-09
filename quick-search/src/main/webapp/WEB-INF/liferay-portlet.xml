@@ -8,6 +8,8 @@
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<ajaxable>true</ajaxable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-javascript>/js/jquery.min.js</header-portlet-javascript>
+		<header-portlet-javascript>/js/typeahead.bundle.js</header-portlet-javascript>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 	</portlet>
 	<role-mapper>
