@@ -1,4 +1,4 @@
-function lightbox(searchInput) {
+function lightbox() {
 
 	// add lightbox/shadow <div/>'s if not previously added
 	if ($('#lightbox').size() == 0) {
@@ -23,7 +23,9 @@ function lightbox(searchInput) {
 	// display the lightbox
 	$('#lightbox').show();
 	$('#lightbox-shadow').show();
-
+	
+	var searchInput = $('#myInputSearch');
+	
 	AUI().use('aui-base', 'liferay-portlet-url', 'aui-node', function(A) {
 		var resourceURL = Liferay.PortletURL.createResourceURL();
 		resourceURL.setPortletId('quicksearch_WAR_quicksearchportlet');
@@ -32,7 +34,7 @@ function lightbox(searchInput) {
 		autocompleteAjax(resourceURL, searchInput, 3);
 	});
 
-	$(searchInput).focus();
+	searchInput.focus();
 
 }
 

@@ -11,6 +11,9 @@ public class Utils {
     public static final String MODEL_USER = "com.liferay.portal.model.User";
     public static final String MODEL_FILE = "com.liferay.portlet.documentlibrary.model.DLFileEntry";
     public static final String MODEL_GROUP = "com.liferay.portal.model.Group";
+    
+    public static final String CONFIGURATION_KEY_CONTROLLED = "keyControlled";
+    public static final String CONFIGURATION_MIN_SEARCH_LETTERS = "minSearchLetters";
 
     public static ThemeDisplay getThemeDisplay(PortletRequest request) {
 	if (null == request) {

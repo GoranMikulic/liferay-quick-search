@@ -5,6 +5,7 @@
 	<portlet>
 		<portlet-name>quick-search</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>mikugo.dev.search.ConfigrationActionImpl</configuration-action-class>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<ajaxable>true</ajaxable>
 		<header-portlet-css>/css/main.css</header-portlet-css>

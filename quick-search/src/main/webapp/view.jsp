@@ -1,17 +1,21 @@
-<%@page import="com.liferay.portal.kernel.util.Constants"%>
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
+<%@page import="mikugo.dev.search.Utils"%>
+<%@include file="/init.jsp"%>
 
-<portlet:defineObjects />
+<%
+boolean keyControlled = GetterUtil.getBoolean(portletPreferences.getValue(Utils.CONFIGURATION_KEY_CONTROLLED, StringPool.TRUE));
+int minSearchLetters = GetterUtil.getInteger(portletPreferences.getValue(Utils.CONFIGURATION_MIN_SEARCH_LETTERS, "3"));
+%>
 
 <portlet:resourceURL var="searchContactsURL">
 	<portlet:param name="action" value="search" />
 </portlet:resourceURL>
 
+
+<% 
+if(keyControlled) {
+%>
 <script type="text/javascript">
 $(document).ready(function() {
-
-	// URL ajax de recherche, Input field of the search
 
 	$(document).keydown(function(e) {
 
@@ -27,3 +31,17 @@ $(document).ready(function() {
 
 });
 </script>
+<%
+} else {
+%>
+
+<input type="text" name="myInputSearch" id="myInputSearch" />
+<script type="text/javascript">
+$(document).ready(function() {
+	autocompleteAjax('${ searchContactsURL }', '#myInputSearch', <%= minSearchLetters %>);
+});
+</script>
+
+<%    
+}
+%>
