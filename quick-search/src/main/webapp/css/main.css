@@ -59,6 +59,11 @@
 		.tt-suggestion {
 			padding: 10px;
 			
+			.asset-type {
+				float: right;
+				font-size: 0.8em;
+			}
+			
 			.summary {
 				/*overflow: hidden; 
 				text-overflow: ellipsis;

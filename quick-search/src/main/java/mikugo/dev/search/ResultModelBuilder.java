@@ -2,6 +2,7 @@ package mikugo.dev.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
@@ -10,6 +11,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
@@ -166,7 +168,7 @@ public class ResultModelBuilder {
 
 	String summary = entrySummary.length() > 200 ? entrySummary.substring(0, 200) + "..." : entrySummary;
 
-	ResultModel model = new ResultModel(entryTitle, summary, viewURL, getUserFriendlyClassName(className),
+	ResultModel model = new ResultModel(entryTitle, summary, viewURL, getUserFriendlyClassName(className, Utils.getThemeDisplay(request).getLocale()),
 		groupName);
 
 	return model;
@@ -220,13 +222,13 @@ public class ResultModelBuilder {
 	return viewURL;
     }
 
-    private String getUserFriendlyClassName(String className) {
+    private String getUserFriendlyClassName(String className, Locale locale) {
 	if (Utils.MODEL_FILE.equals(className)) {
-	    return "file";
+	    return LanguageUtil.get(locale, "file");
 	} else if (Utils.MODEL_JOURNAL_ARTICLE.equals(className)) {
-	    return "article";
+	    return LanguageUtil.get(locale, "article");
 	} else if (Utils.MODEL_USER.equals(className)) {
-	    return "user";
+	    return LanguageUtil.get(locale, "user");
 	} else {
 	    return "";
 	}

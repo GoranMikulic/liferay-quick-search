@@ -159,7 +159,7 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 							'</div>' ].join('\n'),
 					suggestion : function(result) {
 						return "<div class='result-entry'><a href='" + result.displayUrl + "'>"
-								+ "<div class='title'>" + result.title + "<span class='asset-type'> - "+ result.assetType + "</span>" + "</div>" 
+								+ "<div class='title'>" + result.title + "<span class='asset-type'>"+ result.assetType + "</span>" + "</div>" 
 								+ "<div class='summary'>" + result.summary + "</div>"
 								+ "<div class='metadata'>" + "Site: " + result.site + "</div>"
 								+"</a></div>";
