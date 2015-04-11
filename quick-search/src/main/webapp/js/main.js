@@ -1,4 +1,4 @@
-function lightbox() {
+function lightbox(minSearchLetters) {
 
 	// add lightbox/shadow <div/>'s if not previously added
 	if ($('#lightbox').size() == 0) {
@@ -31,7 +31,7 @@ function lightbox() {
 		resourceURL.setPortletId('quicksearch_WAR_quicksearchportlet');
 		resourceURL.setResourceId('get_users');
 		resourceURL.setParameter('action', 'search');
-		autocompleteAjax(resourceURL, searchInput, 3);
+		autocompleteAjax(resourceURL, searchInput, minSearchLetters);
 	});
 
 	searchInput.focus();

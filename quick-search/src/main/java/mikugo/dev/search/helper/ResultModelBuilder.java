@@ -1,4 +1,4 @@
-package mikugo.dev.search;
+package mikugo.dev.search.helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
+
+import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;

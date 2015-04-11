@@ -1,4 +1,4 @@
-package mikugo.dev.search;
+package mikugo.dev.search.model;
 
 public class ResultModel {
 

@@ -1,4 +1,3 @@
-<%@page import="mikugo.dev.search.Utils"%>
 <%@include file="/init.jsp"%>
 <%
     boolean keyControlled = GetterUtil.getBoolean(portletPreferences.getValue(Utils.CONFIGURATION_KEY_CONTROLLED, StringPool.TRUE));
@@ -18,7 +17,7 @@
 				$(document).keydown(function(e) {
 					// Open lightbox on ctrl + enter
 					if (e.ctrlKey && e.keyCode == 13) {
-						lightbox('#myInputSearch');
+						lightbox(<%=minSearchLetters%>);
 					}
 					// Close lightbox on  esc
 					if (e.keyCode == 27) {

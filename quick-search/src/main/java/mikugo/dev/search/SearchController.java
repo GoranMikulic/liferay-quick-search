@@ -7,6 +7,11 @@ import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import mikugo.dev.search.helper.IndexSearcher;
+import mikugo.dev.search.helper.ResultModelBuilder;
+import mikugo.dev.search.helper.Utils;
+import mikugo.dev.search.model.ResultModel;
+
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.liferay.portal.kernel.log.Log;

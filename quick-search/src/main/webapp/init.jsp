@@ -8,6 +8,6 @@
 <%@ page import="com.liferay.portal.kernel.util.Constants"%>
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@ page import="com.liferay.portal.kernel.util.StringPool"%>
-<%@ page import="mikugo.dev.search.Utils"%>
+<%@ page import="mikugo.dev.search.helper.Utils"%>
 
 <portlet:defineObjects />
