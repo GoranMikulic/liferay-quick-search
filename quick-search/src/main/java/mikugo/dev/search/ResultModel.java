@@ -6,12 +6,14 @@ public class ResultModel {
 	private String summary;
 	private String displayUrl;
 	private String assetType;
+	private String site;
 	
-	public ResultModel(String title, String summary, String displayUrl, String assetType) {
+	public ResultModel(String title, String summary, String displayUrl, String assetType, String site) {
 	    this.title = title;
 	    this.summary = summary;
 	    this.displayUrl = displayUrl;
 	    this.assetType = assetType;
+	    this.site = site;
 	}
 	
 	public String getDisplayUrl() {
@@ -44,6 +46,14 @@ public class ResultModel {
 
 	public void setAssetType(String assetType) {
 		this.assetType = assetType;
+	}
+
+	public String getSite() {
+	    return site;
+	}
+
+	public void setSite(String site) {
+	    this.site = site;
 	}
 
 }

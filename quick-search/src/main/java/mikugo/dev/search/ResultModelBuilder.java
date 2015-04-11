@@ -71,6 +71,7 @@ public class ResultModelBuilder {
 	String returnToFullPageURL = (String) request.getAttribute("search.jsp-returnToFullPageURL");
 	PortletURL viewFullContentURL = null;
 	String viewURL = null;
+	String groupName = null;
 
 	AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil
 		.getAssetRendererFactoryByClassName(className);
@@ -125,7 +126,8 @@ public class ResultModelBuilder {
 		viewURL = assetRenderer.getURLViewInContext((LiferayPortletRequest) request,
 			(LiferayPortletResponse) response, viewFullContentURLString);
 
-		log.info(GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getFriendlyURL());
+		groupName = GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getName();
+		log.info(groupName);
 	    } else {
 		viewURL = viewFullContentURL.toString();
 	    }
@@ -164,7 +166,8 @@ public class ResultModelBuilder {
 
 	String summary = entrySummary.length() > 200 ? entrySummary.substring(0, 200) + "..." : entrySummary;
 
-	ResultModel model = new ResultModel(entryTitle, summary, viewURL, getUserFriendlyClassName(className));
+	ResultModel model = new ResultModel(entryTitle, summary, viewURL, getUserFriendlyClassName(className),
+		groupName);
 
 	return model;
     }
