@@ -7,6 +7,13 @@ public class ResultModel {
 	private String displayUrl;
 	private String assetType;
 	
+	public ResultModel(String title, String summary, String displayUrl, String assetType) {
+	    this.title = title;
+	    this.summary = summary;
+	    this.displayUrl = displayUrl;
+	    this.assetType = assetType;
+	}
+	
 	public String getDisplayUrl() {
 		return displayUrl;
 	}

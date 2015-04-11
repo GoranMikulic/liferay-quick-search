@@ -162,11 +162,9 @@ public class ResultModelBuilder {
 
 	viewURL = checkViewURL(themeDisplay, viewURL, themeDisplay.getURLCurrent(), true);
 
-	ResultModel model = new ResultModel();
-	model.setTitle(entryTitle);
-	model.setSummary(entrySummary);
-	model.setDisplayUrl(viewURL);
-	model.setAssetType(getUserFriendlyClassName(className));
+	String summary = entrySummary.length() > 200 ? entrySummary.substring(0, 200) + "..." : entrySummary;
+
+	ResultModel model = new ResultModel(entryTitle, summary, viewURL, getUserFriendlyClassName(className));
 
 	return model;
     }

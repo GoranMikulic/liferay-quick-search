@@ -158,10 +158,11 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 					empty : [ '<div class="empty-message">', 'No asset found',
 							'</div>' ].join('\n'),
 					suggestion : function(result) {
-						return "<a href='" + result.displayUrl
-								+ "'><span class='title'>" + result.title
-								+ "</span> | <i>" + result.assetType
-								+ "</i></a>";
+						return "<div class='result-entry'><a href='" + result.displayUrl + "'>"
+								+ "<div class='title'>" + result.title + "<span class='asset-type'> - "+ result.assetType + "</span>" + "</div>" 
+								+ "<div class='summary'>" + result.summary + "</div>"
+								+ "<div class='metadata'>" + "</div>"
+								+"</a></div>";
 					}
 				},
 				source : ajaxAutocompleteSearch()

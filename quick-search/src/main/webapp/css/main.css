@@ -11,6 +11,14 @@
 	background-color: #efefef;
 }
 
+#myInputSearch:focus,
+.tt-hint {
+	outline:none;
+   	outline-style:none;
+	box-shadow:none;
+	border-color:transparent;
+}
+
 #lightbox {
 	position: absolute;
 	top: 0;
@@ -20,8 +28,11 @@
 	background: #fff;
 	z-index: 1001;
 	display: none;
-	border-radius: 10px;
+	border-radius: 5px;
 	box-shadow: 0px 0px 13px 1px grey;
+	-moz-box-shadow: 0px 0px 13px 1px grey;
+	-webkit-box-shadow: 0px 0px 13px 1px grey;
+	-o-box-shadow: 0px 0px 13px 1px grey;
 	
 	.searchWrapper {
 		#myInputSearch,
@@ -30,14 +41,29 @@
 			 height: 55px;
 			 font-size: 30px;
 			 padding-left: 11px;
-			 border-radius: 10px;
+			 border-radius: 5px;
 			 margin-bottom: 0px;
+			 outline: none;
 		}
 		
 		.tt-dropdown-menu {
-			width: 473px;
+			width: 472px;
 			border-radius: 0px  0px 10px 10px;
-			box-shadow: 0px 0px 13px 1px grey;
+			box-shadow: 0px 10px 13px 1px grey;
+			moz-box-shadow: 0px 10px 13px 1px grey;
+			-webkit-box-shadow: 0px 10px 13px 1px grey;
+			-o-box-shadow: 0px 10px 13px 1px grey;
+			margin-top: -10px;
+		}
+		
+		.tt-suggestion {
+			padding: 10px;
+			
+			.summary {
+				/*overflow: hidden; 
+				text-overflow: ellipsis;
+				white-space: nowrap;*/
+			}
 		}
 	}
 	
