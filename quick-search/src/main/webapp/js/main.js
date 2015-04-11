@@ -14,7 +14,7 @@ function lightbox() {
 	// remove any previously added content
 	$('#lightbox').empty();
 
-	var searchContainer = '<div id="searchBox"><input type="text" name="myInputSearch" id="myInputSearch" /></div>';
+	var searchContainer = '<div class="searchWrapper"><input type="text" name="myInputSearch" id="myInputSearch" /></div>';
 	$('#lightbox').append(searchContainer);
 
 	// move the lightbox to the current window top + 100px

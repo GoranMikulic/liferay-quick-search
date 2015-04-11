@@ -1,4 +1,3 @@
-<%@page import="mikugo.dev.search.Utils"%>
 <%@include file="/init.jsp"%>
 <liferay-portlet:actionURL portletConfiguration="true"
 	var="configurationURL" />
@@ -13,11 +12,11 @@
 <aui:form action="<%=configurationURL%>" method="post" name="fm">
 	<aui:input name="<%=Constants.CMD%>" type="hidden"
 		value="<%=Constants.UPDATE%>" />
-
+	
 	<aui:input name="preferences--keyControlled--" type="checkbox"
-		value="<%=keyControlled%>" />
+		value="<%=keyControlled%>" label="config.keyControlled"/>
 	<aui:input name="preferences--minSearchLetters--" type="text"
-		value="<%=minSearchLetters%>" />
+		value="<%=minSearchLetters%>" label="config.minSearchLetters" />
 
 	<aui:button-row>
 		<aui:button type="submit" />

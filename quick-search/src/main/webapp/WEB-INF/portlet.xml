@@ -20,6 +20,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>quick-search</title>
 			<short-title>quick-search</short-title>
