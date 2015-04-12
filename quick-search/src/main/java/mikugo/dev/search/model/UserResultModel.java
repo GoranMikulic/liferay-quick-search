@@ -11,12 +11,22 @@ import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
+/**
+ * This class represents a result model for {@link User}
+ * 
+ * @author mikugo
+ *
+ */
 public class UserResultModel extends ResultModel {
+
     private static Log log = LogFactoryUtil.getLog(UserResultModel.class);
 
     public UserResultModel(Result result) {
 	super(result);
+    }
 
+    @Override
+    public void writeMetadata(Result result) {
 	try {
 	    User user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
 	    StringBuilder sb = new StringBuilder();
@@ -39,7 +49,5 @@ public class UserResultModel extends ResultModel {
 	} catch (SystemException e) {
 	    log.error(e);
 	}
-
     }
-
 }

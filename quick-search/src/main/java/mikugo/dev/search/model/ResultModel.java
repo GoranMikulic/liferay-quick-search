@@ -1,6 +1,13 @@
 package mikugo.dev.search.model;
 
+import com.liferay.portlet.asset.model.AssetEntry;
 
+/**
+ * This class represents a result model for {@link AssetEntry}
+ * 
+ * @author mikugo
+ *
+ */
 public class ResultModel {
 
     private String title;
@@ -10,11 +17,15 @@ public class ResultModel {
     private String metadata;
 
     public ResultModel(Result result) {
-	
+
 	setTitle(result.getEntryTitle());
 	setSummary(result.getEntrySummary());
 	setDisplayUrl(result.getViewURL());
 	setAssetType(result.getUserFriendlyClassName());
+	writeMetadata(result);
+    }
+
+    public void writeMetadata(Result result) {
 	setMetadata(result.getGroupName());
     }
 
