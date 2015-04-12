@@ -3,6 +3,7 @@ package mikugo.dev.search;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletPreferences;
 
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 
@@ -15,9 +16,10 @@ public class ConfigrationActionImpl extends DefaultConfigurationAction {
 
         super.processAction(portletConfig, actionRequest, actionResponse);
         
-	// PortletPreferences prefs = actionRequest.getPreferences();
+	PortletPreferences prefs = actionRequest.getPreferences();
 	//
-	// String keyControlled = prefs.getValue("keyControlled", "true");
+	String assetTypes = prefs.getValue("assetTypes", null);
+	
         
     }
    

@@ -11,9 +11,11 @@ public class Utils {
     public static final String MODEL_USER = "com.liferay.portal.model.User";
     public static final String MODEL_FILE = "com.liferay.portlet.documentlibrary.model.DLFileEntry";
     public static final String MODEL_GROUP = "com.liferay.portal.model.Group";
+    public static final String[] MODELS_AVAILABLE = {MODEL_JOURNAL_ARTICLE, MODEL_USER, MODEL_FILE, MODEL_GROUP};
     
     public static final String CONFIGURATION_KEY_CONTROLLED = "keyControlled";
     public static final String CONFIGURATION_MIN_SEARCH_LETTERS = "minSearchLetters";
+    public static final String CONFIGURATION_ASSET_TYPES = "assetTypes";
 
     public static ThemeDisplay getThemeDisplay(PortletRequest request) {
 	if (null == request) {
