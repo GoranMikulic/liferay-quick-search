@@ -41,6 +41,7 @@ import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 
 public class ResultModelBuilder {
+    
     private ThemeDisplay themeDisplay;
     private ResourceRequest request;
     private ResourceResponse response;
@@ -81,7 +82,8 @@ public class ResultModelBuilder {
 		.getAssetRendererFactoryByClassName(className);
 
 	AssetRenderer assetRenderer = null;
-
+	AssetEntry assetEntry;
+	
 	if (assetRendererFactory != null) {
 	    long classPK = GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK));
 
@@ -91,12 +93,11 @@ public class ResultModelBuilder {
 		classPK = resourcePrimKey;
 	    }
 
-	    AssetEntry assetEntry = AssetEntryLocalServiceUtil.getEntry(className, classPK);
+	    assetEntry = AssetEntryLocalServiceUtil.getEntry(className, classPK);
 
 	    assetRenderer = assetRendererFactory.getAssetRenderer(classPK);
 
-	    viewFullContentURL = getViewFullContentURL(request, Utils.getThemeDisplay(request),
-		    PortletKeys.ASSET_PUBLISHER, document);
+	    viewFullContentURL = getViewFullContentURL(request, themeDisplay, PortletKeys.ASSET_PUBLISHER, document);
 
 	    viewFullContentURL.setParameter("struts_action", "/asset_publisher/view_content");
 
@@ -107,38 +108,30 @@ public class ResultModelBuilder {
 	    viewFullContentURL.setParameter("assetEntryId", String.valueOf(assetEntry.getEntryId()));
 	    viewFullContentURL.setParameter("type", assetRendererFactory.getType());
 
-	    // long scopeGroupId =
-	    // GetterUtil.getLong(document.get(Field.SCOPE_GROUP_ID));
-
 	    if (Validator.isNotNull(assetRenderer.getUrlTitle())) {
-		// if ((assetRenderer.getGroupId() > 0) &&
-		// (assetRenderer.getGroupId() != scopeGroupId)) {
 		viewFullContentURL.setParameter("groupId", String.valueOf(assetRenderer.getGroupId()));
-		// }
-
 		viewFullContentURL.setParameter("urlTitle", assetRenderer.getUrlTitle());
 	    }
 	    boolean viewInContext = true;
 	    if (viewInContext || !assetEntry.isVisible()) {
-		// boolean inheritRedirect = true;
 
 		String viewFullContentURLString = viewFullContentURL.toString();
-
 		viewFullContentURLString = HttpUtil.setParameter(viewFullContentURLString, "redirect",
 			themeDisplay.getURLCurrent());
 
 		viewURL = assetRenderer.getURLViewInContext((LiferayPortletRequest) request,
 			(LiferayPortletResponse) response, viewFullContentURLString);
-
-		groupName = GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getName();
-		log.info(groupName);
+		
+		if(!Utils.MODEL_USER.equals(className)) {		    
+		    groupName = GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getName();
+		}
 	    } else {
 		viewURL = viewFullContentURL.toString();
 	    }
 	} else {
 	    String portletId = document.get(Field.PORTLET_ID);
 
-	    viewFullContentURL = getViewFullContentURL(request, Utils.getThemeDisplay(request), portletId, document);
+	    viewFullContentURL = getViewFullContentURL(request, themeDisplay, portletId, document);
 
 	    if (Validator.isNotNull(returnToFullPageURL)) {
 		viewFullContentURL.setParameter("returnToFullPageURL", returnToFullPageURL);
@@ -152,14 +145,13 @@ public class ResultModelBuilder {
 	if (indexer != null) {
 	    String snippet = document.get(Field.SNIPPET);
 
-	    Summary summary = indexer.getSummary(document, Utils.getThemeDisplay(request).getLocale(), snippet,
-		    viewFullContentURL);
+	    Summary summary = indexer.getSummary(document, themeDisplay.getLocale(), snippet, viewFullContentURL);
 
 	    entryTitle = summary.getTitle();
 	    entrySummary = summary.getContent();
 	} else if (assetRenderer != null) {
-	    entryTitle = assetRenderer.getTitle(Utils.getThemeDisplay(request).getLocale());
-	    entrySummary = assetRenderer.getSearchSummary(Utils.getThemeDisplay(request).getLocale());
+	    entryTitle = assetRenderer.getTitle(themeDisplay.getLocale());
+	    entrySummary = assetRenderer.getSearchSummary(themeDisplay.getLocale());
 	}
 
 	if ((assetRendererFactory == null)) {
@@ -169,9 +161,9 @@ public class ResultModelBuilder {
 	viewURL = checkViewURL(themeDisplay, viewURL, themeDisplay.getURLCurrent(), true);
 
 	String summary = entrySummary.length() > 200 ? entrySummary.substring(0, 200) + "..." : entrySummary;
-
-	ResultModel model = new ResultModel(entryTitle, summary, viewURL, getUserFriendlyClassName(className, Utils.getThemeDisplay(request).getLocale()),
-		groupName);
+	
+	ResultModel model = new ResultModel(entryTitle, summary, viewURL, getUserFriendlyClassName(className,
+		themeDisplay.getLocale()), groupName);
 
 	return model;
     }
