@@ -161,7 +161,7 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 						return "<div class='result-entry'><a href='" + result.displayUrl + "'>"
 								+ "<div class='title'>" + result.title + "<span class='asset-type'>"+ result.assetType + "</span>" + "</div>" 
 								+ "<div class='summary'>" + result.summary + "</div>"
-								+ "<div class='metadata'>" + "Site: " + result.site + "</div>"
+								+ "<div class='metadata'>" + result.metadata + "</div>"
 								+"</a></div>";
 					}
 				},
