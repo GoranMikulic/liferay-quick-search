@@ -2,6 +2,7 @@ package mikugo.dev.search.helper;
 
 import java.util.List;
 
+import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 
 import com.liferay.portal.kernel.log.Log;
@@ -19,14 +20,14 @@ public class IndexSearcher {
 	
 	private static Log log = LogFactoryUtil.getLog(IndexSearcher.class);
 	
-	public List<Document> search(ResourceRequest request, String pattern)
+	public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames)
 			throws SearchException {
 		
 		Indexer indexer = FacetedSearcher.getInstance();
 		SearchContext searchContext = new SearchContext();
 
-		String[] entryClassNames = { Utils.MODEL_JOURNAL_ARTICLE,
-				Utils.MODEL_USER, Utils.MODEL_FILE };
+        	// String[] entryClassNames = { Utils.MODEL_JOURNAL_ARTICLE,
+        	// Utils.MODEL_USER, Utils.MODEL_FILE };
 		
 		searchContext.setEntryClassNames(entryClassNames);
 		Facet assetEntriesFacet = new AssetEntriesFacet(searchContext);
@@ -40,7 +41,7 @@ public class IndexSearcher {
 		searchContext.setEnd(5);
 		
 		Hits hits = indexer.search(searchContext);
-
+		
 		List<Document> documents = hits.toList();
 
 		log.info("Documents found: " + documents.size());

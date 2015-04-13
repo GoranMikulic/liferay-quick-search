@@ -5,22 +5,24 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletPreferences;
 
+import mikugo.dev.search.helper.Utils;
+
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 
-
 public class ConfigrationActionImpl extends DefaultConfigurationAction {
-    
+
     @Override
     public void processAction(PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse)
-            throws Exception {
+	    throws Exception {
 
-        super.processAction(portletConfig, actionRequest, actionResponse);
-        
+	super.processAction(portletConfig, actionRequest, actionResponse);
+
 	PortletPreferences prefs = actionRequest.getPreferences();
-	//
-	String assetTypes = prefs.getValue("assetTypes", null);
-	
-        
+
+	// Array is by default saved in one String, splitting String to serve it
+	// for presentation
+	prefs.setValues(Utils.CONFIGURATION_ASSET_TYPES, prefs.getValue(Utils.CONFIGURATION_ASSET_TYPES, "").split(","));
+	prefs.store();
     }
-   
+
 }

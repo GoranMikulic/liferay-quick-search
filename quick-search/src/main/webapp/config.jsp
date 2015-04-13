@@ -1,8 +1,3 @@
-<%@page import="mikugo.dev.search.helper.AssetTypes"%>
-<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="com.liferay.portal.kernel.util.ArrayUtil"%>
 <%@include file="/init.jsp"%>
 <liferay-portlet:actionURL portletConfiguration="true"
 	var="configurationURL" />
@@ -16,10 +11,6 @@
     
     String[] assetTypes = GetterUtil.getStringValues(portletPreferences.getValues(
 		    Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames()));
-    
-    for (String type : assetTypes) {
-		System.out.println(type);
-    }
 %>
 
 <aui:form action="<%=configurationURL%>" method="post" name="fm">
@@ -31,7 +22,6 @@
 	
 	<aui:select name="preferences--minSearchLetters--"
 		label="config.minSearchLetters">
-		
 		<%
 		    for (int i = 1; i < 6; i++) {
 		%>
@@ -54,7 +44,7 @@
 		    for (Map.Entry<String,String> entry : map.entrySet()) {
 		%>
 			<aui:option label="<%=entry.getKey()%>"
-				selected='<%=ArrayUtil.contains(assetTypes[0].split(","), entry.getValue())%>'
+				selected='<%=ArrayUtil.contains(assetTypes, entry.getValue())%>'
 				value="<%=entry.getValue()%>" />
 		<%
 		    }

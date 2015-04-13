@@ -7,6 +7,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
+import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.helper.Utils;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -188,11 +189,11 @@ public class Result {
     }
 
     public String getUserFriendlyClassName() {
-	if (Utils.MODEL_FILE.equals(className)) {
+	if (AssetTypes.FILEENTRY.getClassName().equals(className)) {
 	    return LanguageUtil.get(themeDisplay.getLocale(), "file");
-	} else if (Utils.MODEL_JOURNAL_ARTICLE.equals(className)) {
+	} else if (AssetTypes.JOURNAL_ARTICLE.getClassName().equals(className)) {
 	    return LanguageUtil.get(themeDisplay.getLocale(), "article");
-	} else if (Utils.MODEL_USER.equals(className)) {
+	} else if (AssetTypes.USER.getClassName().equals(className)) {
 	    return LanguageUtil.get(themeDisplay.getLocale(), "user");
 	} else {
 	    return "";

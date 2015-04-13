@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.helper.IndexSearcher;
 import mikugo.dev.search.helper.ResultModelBuilder;
 import mikugo.dev.search.helper.Utils;
@@ -42,9 +44,12 @@ public class SearchController extends MVCPortlet {
     }
 
     public void serveResults(ResourceRequest request, ResourceResponse response, String pattern) throws Exception {
-
+	PortletPreferences preferences = request.getPreferences();
+	String[] assetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames());
+	
 	IndexSearcher searcher = new IndexSearcher();
-	List<Document> result = searcher.search(request, pattern);
+	
+	List<Document> result = searcher.search(request, pattern, assetTypes);
 	List<ResultModel> resultModelList = new ResultModelBuilder(Utils.getThemeDisplay(request), request, response)
 		.buildList(result);
 
