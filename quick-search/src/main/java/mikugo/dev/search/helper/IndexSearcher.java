@@ -25,9 +25,6 @@ public class IndexSearcher {
 		
 		Indexer indexer = FacetedSearcher.getInstance();
 		SearchContext searchContext = new SearchContext();
-
-        	// String[] entryClassNames = { Utils.MODEL_JOURNAL_ARTICLE,
-        	// Utils.MODEL_USER, Utils.MODEL_FILE };
 		
 		searchContext.setEntryClassNames(entryClassNames);
 		Facet assetEntriesFacet = new AssetEntriesFacet(searchContext);
@@ -38,6 +35,7 @@ public class IndexSearcher {
 		searchContext.setKeywords(pattern);
 		searchContext.setCompanyId(Utils.getThemeDisplay(request).getCompanyId());
 		searchContext.setLike(true);
+		searchContext.setStart(0);
 		searchContext.setEnd(5);
 		
 		Hits hits = indexer.search(searchContext);

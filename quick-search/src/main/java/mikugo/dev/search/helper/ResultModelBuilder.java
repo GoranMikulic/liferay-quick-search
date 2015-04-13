@@ -20,8 +20,6 @@ public class ResultModelBuilder {
     private ResourceRequest request;
     private ResourceResponse response;
 
-    // private static Log log = LogFactoryUtil.getLog(ResultModelBuilder.class);
-
     public ResultModelBuilder(ThemeDisplay themeDisplay, ResourceRequest request, ResourceResponse response) {
 	this.themeDisplay = themeDisplay;
 	this.request = request;
