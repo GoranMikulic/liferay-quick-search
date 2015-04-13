@@ -2,7 +2,6 @@ package mikugo.dev.search.helper;
 
 import java.util.List;
 
-import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 
 import com.liferay.portal.kernel.log.Log;
@@ -20,7 +19,7 @@ public class IndexSearcher {
 	
 	private static Log log = LogFactoryUtil.getLog(IndexSearcher.class);
 	
-	public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames)
+	public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames, int maximumSearchResults)
 			throws SearchException {
 		
 		Indexer indexer = FacetedSearcher.getInstance();
@@ -36,7 +35,7 @@ public class IndexSearcher {
 		searchContext.setCompanyId(Utils.getThemeDisplay(request).getCompanyId());
 		searchContext.setLike(true);
 		searchContext.setStart(0);
-		searchContext.setEnd(5);
+		searchContext.setEnd(maximumSearchResults);
 		
 		Hits hits = indexer.search(searchContext);
 		

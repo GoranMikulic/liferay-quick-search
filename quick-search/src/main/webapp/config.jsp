@@ -9,6 +9,9 @@
     int minSearchLetters = GetterUtil.getInteger(portletPreferences.getValue(
 		    Utils.CONFIGURATION_MIN_SEARCH_LETTERS, "3"));
     
+    int maximumSearchResults = GetterUtil.getInteger(portletPreferences.getValue(
+	    Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
+    
     String[] assetTypes = GetterUtil.getStringValues(portletPreferences.getValues(
 		    Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames()));
 %>
@@ -31,7 +34,17 @@
 		    }
 		%>
 	</aui:select>
-
+	<aui:select name="preferences--maximumSearchResults--"
+		label="config.maximumSearchResults">
+		<%
+		    for (int i = 1; i < 16; i++) {
+		%>
+		<aui:option label="<%=i%>" selected="<%=i == maximumSearchResults%>"
+			value="<%=i%>" />
+		<%
+		    }
+		%>
+	</aui:select>
 	<aui:select name="preferences--assetTypes--"
 		label="config.minSearchLetters" multiple="true">
 		<%

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class SearchController extends MVCPortlet {
@@ -44,12 +45,14 @@ public class SearchController extends MVCPortlet {
     }
 
     public void serveResults(ResourceRequest request, ResourceResponse response, String pattern) throws Exception {
+
 	PortletPreferences preferences = request.getPreferences();
 	String[] assetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames());
-	
-	IndexSearcher searcher = new IndexSearcher();
-	
-	List<Document> result = searcher.search(request, pattern, assetTypes);
+
+	int maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
+		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
+
+	List<Document> result = new IndexSearcher().search(request, pattern, assetTypes, maximumSearchResults);
 	List<ResultModel> resultModelList = new ResultModelBuilder(Utils.getThemeDisplay(request), request, response)
 		.buildList(result);
 
