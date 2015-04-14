@@ -15,36 +15,43 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.facet.AssetEntriesFacet;
 import com.liferay.portal.kernel.search.facet.Facet;
 
+/**
+ * This class is responsible to build process the search and serve the results.
+ * Connection between Portlet and Liferay Search API
+ * 
+ * @author mikugo
+ *
+ */
 public class IndexSearcher {
-	
-	private static Log log = LogFactoryUtil.getLog(IndexSearcher.class);
-	
-	public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames, int maximumSearchResults)
-			throws SearchException {
-		
-		Indexer indexer = FacetedSearcher.getInstance();
-		SearchContext searchContext = new SearchContext();
-		
-		searchContext.setEntryClassNames(entryClassNames);
-		Facet assetEntriesFacet = new AssetEntriesFacet(searchContext);
 
-		assetEntriesFacet.setStatic(true);
+    private static Log log = LogFactoryUtil.getLog(IndexSearcher.class);
 
-		searchContext.addFacet(assetEntriesFacet);
-		searchContext.setKeywords(pattern);
-		searchContext.setCompanyId(Utils.getThemeDisplay(request).getCompanyId());
-		searchContext.setLike(true);
-		searchContext.setStart(0);
-		searchContext.setEnd(maximumSearchResults);
-		
-		Hits hits = indexer.search(searchContext);
-		
-		List<Document> documents = hits.toList();
+    public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames,
+	    int maximumSearchResults) throws SearchException {
 
-		log.debug("Documents found: " + documents.size());
-		log.debug(hits.getQuery().toString());
+	Indexer indexer = FacetedSearcher.getInstance();
+	SearchContext searchContext = new SearchContext();
 
-		return documents;
+	searchContext.setEntryClassNames(entryClassNames);
+	Facet assetEntriesFacet = new AssetEntriesFacet(searchContext);
 
-	}
+	assetEntriesFacet.setStatic(true);
+
+	searchContext.addFacet(assetEntriesFacet);
+	searchContext.setKeywords(pattern);
+	searchContext.setCompanyId(Utils.getThemeDisplay(request).getCompanyId());
+	searchContext.setLike(true);
+	searchContext.setStart(0);
+	searchContext.setEnd(maximumSearchResults);
+
+	Hits hits = indexer.search(searchContext);
+
+	List<Document> documents = hits.toList();
+
+	log.debug("Documents found: " + documents.size());
+	log.debug(hits.getQuery().toString());
+
+	return documents;
+
+    }
 }

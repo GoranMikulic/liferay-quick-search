@@ -24,6 +24,13 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
+/**
+ * 
+ * Portlet-Controller-Class, handles the requests from the UI 
+ * 
+ * @author mikugo
+ *
+ */
 public class SearchController extends MVCPortlet {
     private static Log log = LogFactoryUtil.getLog(SearchController.class);
 
