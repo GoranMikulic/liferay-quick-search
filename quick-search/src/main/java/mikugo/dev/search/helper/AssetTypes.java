@@ -26,6 +26,17 @@ public enum AssetTypes {
 	return className;
     }
 
+    public static String getClassName(String readableName) {
+
+	for (AssetTypes type : AssetTypes.values()) {
+	    if (readableName.equals(type.readableName)) {
+		return type.className;
+	    }
+	}
+
+	return null;
+    }
+
     public static String[] getAllClassNames() {
 	return new String[] { USER.className, FILEENTRY.className, JOURNAL_ARTICLE.className,
 		BOOKMARKS_ENTRY.className, BLOGS_ENTRY.className, MBM_MESSAGE.className, WIKI_PAGE.className };

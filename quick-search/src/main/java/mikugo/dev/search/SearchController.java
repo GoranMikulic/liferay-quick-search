@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -48,7 +49,21 @@ public class SearchController extends MVCPortlet {
 
 	PortletPreferences preferences = request.getPreferences();
 	String[] assetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames());
-
+	
+	//check if pattern has a facet prefix and manipulate search
+	if(pattern.contains(":")){
+	    String prefix = pattern.substring(0, pattern.indexOf(":"));
+	    log.debug(prefix);
+	    
+	    String className = AssetTypes.getClassName(prefix);
+	    log.debug(className);
+	    
+	    if(className != null && ArrayUtil.contains(assetTypes, className)) {
+		assetTypes = new String[]{className};
+		pattern = pattern.substring(pattern.indexOf(":")+1).trim();
+	    }
+	}
+	
 	int maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
 		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
 
