@@ -41,8 +41,8 @@ public class IndexSearcher {
 		
 		List<Document> documents = hits.toList();
 
-		log.info("Documents found: " + documents.size());
-		log.info(hits.getQuery().toString());
+		log.debug("Documents found: " + documents.size());
+		log.debug(hits.getQuery().toString());
 
 		return documents;
 

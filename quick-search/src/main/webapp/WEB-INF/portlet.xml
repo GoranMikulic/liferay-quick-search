@@ -6,7 +6,7 @@
 	version="2.0">
 	<portlet>
 		<portlet-name>quick-search</portlet-name>
-		<display-name>quick-search</display-name>
+		<display-name>Quick Search</display-name>
 		<portlet-class>mikugo.dev.search.SearchController</portlet-class>
 		<init-param>
 			<name>config-template</name>
