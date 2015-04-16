@@ -188,16 +188,15 @@ public class Result {
 	return viewURL;
     }
 
+    // TODO: Refactoring! Use enum
     public String getUserFriendlyClassName() {
-	if (AssetTypes.FILEENTRY.getClassName().equals(className)) {
-	    return LanguageUtil.get(themeDisplay.getLocale(), "file");
-	} else if (AssetTypes.JOURNAL_ARTICLE.getClassName().equals(className)) {
-	    return LanguageUtil.get(themeDisplay.getLocale(), "article");
-	} else if (AssetTypes.USER.getClassName().equals(className)) {
-	    return LanguageUtil.get(themeDisplay.getLocale(), "user");
-	} else {
-	    return "";
+	for (AssetTypes type : AssetTypes.values()) {
+	    if (type.getClassName().equals(className)) {
+		return LanguageUtil.get(themeDisplay.getLocale(), type.getReadableName());
+	    }
 	}
+	
+	return "";
     }
 
     public String getEntryTitle() {
