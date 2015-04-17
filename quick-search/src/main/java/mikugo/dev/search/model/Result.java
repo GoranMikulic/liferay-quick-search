@@ -8,7 +8,6 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
 import mikugo.dev.search.helper.AssetTypes;
-import mikugo.dev.search.helper.Utils;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;

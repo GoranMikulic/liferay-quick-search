@@ -7,7 +7,7 @@
 	<artifactId>quicksearch-portlet</artifactId>
 	<packaging>war</packaging>
 	<name>quick-search Portlet</name>
-	<version>0.1.0.0</version>
+	<version>1.0.0.0</version>
 	<build>
 		<plugins>
 			<plugin>
