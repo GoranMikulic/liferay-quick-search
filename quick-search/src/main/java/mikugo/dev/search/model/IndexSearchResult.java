@@ -34,7 +34,13 @@ import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 
-public class Result {
+/**
+ * Respresenting results from liferay search api, searchin the index
+ * 
+ * @author mikugo
+ *
+ */
+public class IndexSearchResult {
     private String className;
     private String entryTitle;
     private String entrySummary;
@@ -49,12 +55,12 @@ public class Result {
     private Summary summary;
     private ThemeDisplay themeDisplay;
 
-    public Result(Document document, ResourceRequest request, ResourceResponse response, ThemeDisplay themeDisplay)
-	    throws Exception {
+    public IndexSearchResult(Document document, ResourceRequest request, ResourceResponse response,
+	    ThemeDisplay themeDisplay) throws Exception {
 	this.className = document.get(Field.ENTRY_CLASS_NAME);
 	this.returnToFullPageURL = (String) request.getAttribute("search.jsp-returnToFullPageURL");
 	this.themeDisplay = themeDisplay;
-	assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(className);
+	this.assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(className);
 	processResult(document, request, response, themeDisplay);
     }
 
@@ -121,7 +127,7 @@ public class Result {
 	    String snippet = document.get(Field.SNIPPET);
 
 	    Summary summary = indexer.getSummary(document, themeDisplay.getLocale(), snippet, viewFullContentURL);
-	    if(summary != null) {		
+	    if (summary != null) {
 		entryTitle = summary.getTitle();
 		entrySummary = summary.getContent();
 	    }
@@ -192,7 +198,7 @@ public class Result {
 		return LanguageUtil.get(themeDisplay.getLocale(), type.getReadableName());
 	    }
 	}
-	
+
 	return "";
     }
 

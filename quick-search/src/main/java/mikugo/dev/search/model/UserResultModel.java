@@ -21,12 +21,12 @@ public class UserResultModel extends ResultModel {
 
     private static Log log = LogFactoryUtil.getLog(UserResultModel.class);
 
-    public UserResultModel(Result result) {
+    public UserResultModel(IndexSearchResult result) {
 	super(result);
     }
 
     @Override
-    public void writeMetadata(Result result) {
+    public void writeMetadata(IndexSearchResult result) {
 	try {
 	    User user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
 	    StringBuilder sb = new StringBuilder();

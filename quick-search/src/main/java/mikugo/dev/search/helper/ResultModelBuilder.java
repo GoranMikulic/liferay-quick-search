@@ -6,7 +6,7 @@ import java.util.List;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import mikugo.dev.search.model.Result;
+import mikugo.dev.search.model.IndexSearchResult;
 import mikugo.dev.search.model.ResultModel;
 import mikugo.dev.search.model.ResultModelFactory;
 
@@ -26,6 +26,13 @@ public class ResultModelBuilder {
 	this.response = response;
     }
 
+    /**
+     * Mapping a list of {@link Document} to a list of {@link ResultModel}
+     * 
+     * @param result
+     * @return
+     * @throws Exception
+     */
     public List<ResultModel> buildList(List<Document> result) throws Exception {
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
@@ -39,9 +46,16 @@ public class ResultModelBuilder {
 	return resultModelList;
     }
 
+    /**
+     * Mapping document result to {@link ResultModel}
+     * 
+     * @param document
+     * @return
+     * @throws Exception
+     */
     private ResultModel buildModel(Document document) throws Exception {
-	return new ResultModelFactory().getModel(document.get(Field.ENTRY_CLASS_NAME), new Result(document, request,
-		response, themeDisplay));
+	return new ResultModelFactory().getModel(document.get(Field.ENTRY_CLASS_NAME), new IndexSearchResult(document,
+		request, response, themeDisplay));
     }
 
 }

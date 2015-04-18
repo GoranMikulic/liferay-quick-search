@@ -9,7 +9,15 @@ import mikugo.dev.search.helper.AssetTypes;
  *
  */
 public class ResultModelFactory {
-    public ResultModel getModel(String entryType, Result result) {
+    
+    /**
+     * Delegates Mapping to specific model class
+     * 
+     * @param entryType
+     * @param result
+     * @return
+     */
+    public ResultModel getModel(String entryType, IndexSearchResult result) {
 
 	if (AssetTypes.USER.getClassName().equals(entryType)) {
 	    return new UserResultModel(result);

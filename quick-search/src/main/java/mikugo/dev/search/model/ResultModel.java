@@ -24,7 +24,7 @@ public class ResultModel {
 	this.metadata = metadata;
     }
     
-    public ResultModel(Result result) {
+    public ResultModel(IndexSearchResult result) {
 
 	setTitle(result.getEntryTitle());
 	setSummary(result.getEntrySummary());
@@ -33,7 +33,7 @@ public class ResultModel {
 	writeMetadata(result);
     }
 
-    public void writeMetadata(Result result) {
+    public void writeMetadata(IndexSearchResult result) {
 	setMetadata(result.getGroupName());
     }
 
