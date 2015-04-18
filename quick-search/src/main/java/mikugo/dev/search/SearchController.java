@@ -61,10 +61,7 @@ public class SearchController extends MVCPortlet {
 	// check if pattern has a facet prefix and manipulate search
 	if (pattern.contains(":")) {
 	    String prefix = pattern.substring(0, pattern.indexOf(":"));
-	    log.debug(prefix);
-
 	    String className = AssetTypes.getClassName(prefix);
-	    log.debug(className);
 
 	    if (className != null && ArrayUtil.contains(assetTypes, className)) {
 		assetTypes = new String[] { className };
@@ -83,10 +80,15 @@ public class SearchController extends MVCPortlet {
 	List<ResultModel> resultModelList;
 
 	if (!isCustomAssetSearch) {
+	    //remove asset types which are not for index search
+	    //TODO: this should be refacotred
+	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.SITE.getClassName());
+	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.LAYOUT.getClassName());
 	    resultModelList = new IndexSearcher(request, pattern, assetTypes, maximumSearchResults, response)
 		    .getResult();
 	} else {
-	    resultModelList = new DynamicQuerySearcher(assetTypes[0], pattern, maximumSearchResults).getResult();
+	    resultModelList = new DynamicQuerySearcher(assetTypes[0], pattern, maximumSearchResults,
+		    Utils.getThemeDisplay(request)).getResult();
 	}
 
 	ObjectMapper mapper = new ObjectMapper();

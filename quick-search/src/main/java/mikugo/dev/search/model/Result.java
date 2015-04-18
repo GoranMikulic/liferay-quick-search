@@ -121,9 +121,10 @@ public class Result {
 	    String snippet = document.get(Field.SNIPPET);
 
 	    Summary summary = indexer.getSummary(document, themeDisplay.getLocale(), snippet, viewFullContentURL);
-
-	    entryTitle = summary.getTitle();
-	    entrySummary = summary.getContent();
+	    if(summary != null) {		
+		entryTitle = summary.getTitle();
+		entrySummary = summary.getContent();
+	    }
 	} else if (assetRenderer != null) {
 	    entryTitle = assetRenderer.getTitle(themeDisplay.getLocale());
 	    entrySummary = assetRenderer.getSearchSummary(themeDisplay.getLocale());
@@ -134,9 +135,6 @@ public class Result {
 	}
 
 	viewURL = checkViewURL(themeDisplay, viewURL, themeDisplay.getURLCurrent(), true);
-
-	// String summary = entrySummary.length() > 200 ?
-	// entrySummary.substring(0, 200) + "..." : entrySummary;
     }
 
     private PortletURL getViewFullContentURL(ResourceRequest request, ThemeDisplay themeDisplay, String portletId,

@@ -8,21 +8,26 @@ import mikugo.dev.search.model.ResultModel;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 
 public class DynamicQueryResultBuilder {
 
     private String className;
     private DynamicQuery query;
     private int maxSearchResults;
+    private ThemeDisplay themeDisplay;
 
-    public DynamicQueryResultBuilder(String className, DynamicQuery query, int maxSearchResults) {
+    public DynamicQueryResultBuilder(String className, DynamicQuery query, int maxSearchResults,
+	    ThemeDisplay themeDisplay) {
 	this.className = className;
 	this.query = query;
 	this.maxSearchResults = maxSearchResults;
+	this.themeDisplay = themeDisplay;
     }
 
     @SuppressWarnings("unchecked")
@@ -30,17 +35,18 @@ public class DynamicQueryResultBuilder {
 	if (className.equals(AssetTypes.SITE.getClassName())) {
 	    return getGroupResult(GroupLocalServiceUtil.dynamicQuery(this.query, 0, this.maxSearchResults));
 	} else if (className.equals(AssetTypes.LAYOUT.getClassName())) {
-	    return getSiteResult(LayoutLocalServiceUtil.dynamicQuery(query, 0, this.maxSearchResults));
+	    return getLayoutResult(LayoutLocalServiceUtil.dynamicQuery(query, 0, this.maxSearchResults));
 	}
 	return null;
     }
 
-    private List<ResultModel> getSiteResult(List<Layout> result) throws PortalException, SystemException {
+    private List<ResultModel> getLayoutResult(List<Layout> result) throws PortalException, SystemException {
 	List<ResultModel> resultModel = new ArrayList<ResultModel>();
 
 	for (Layout layout : result) {
 	    resultModel.add(new ResultModel(layout.getName(), layout.getDescription(), layout.getFriendlyURL(),
-		    "layout", layout.getGroup().getDescriptiveName()));
+		    LanguageUtil.get(themeDisplay.getLocale(), AssetTypes.LAYOUT.getReadableName()), layout.getGroup()
+			    .getDescriptiveName()));
 	}
 
 	return resultModel;
@@ -50,8 +56,9 @@ public class DynamicQueryResultBuilder {
 	List<ResultModel> resultModel = new ArrayList<ResultModel>();
 
 	for (Group group : result) {
-	    resultModel.add(new ResultModel(group.getDescriptiveName(), group.getDescription(), group.getFriendlyURL(),
-		    "site", ""));
+	    resultModel.add(new ResultModel(group.getDescriptiveName(), group.getDescription(), "/web" + group
+		    .getFriendlyURL(), LanguageUtil.get(themeDisplay.getLocale(),
+		    AssetTypes.SITE.getReadableName()), ""));
 	}
 
 	return resultModel;

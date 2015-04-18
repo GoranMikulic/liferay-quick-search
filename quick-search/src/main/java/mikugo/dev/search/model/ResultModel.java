@@ -21,7 +21,7 @@ public class ResultModel {
 	this.summary = summary;
 	this.displayUrl = displayUrl;
 	this.assetType = assetType;
-	this.metadata = this.metadata;
+	this.metadata = metadata;
     }
     
     public ResultModel(Result result) {
