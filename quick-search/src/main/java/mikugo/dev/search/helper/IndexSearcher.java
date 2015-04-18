@@ -3,6 +3,9 @@ package mikugo.dev.search.helper;
 import java.util.List;
 
 import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+
+import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -22,9 +25,23 @@ import com.liferay.portal.kernel.search.facet.Facet;
  * @author mikugo
  *
  */
-public class IndexSearcher {
+public class IndexSearcher implements Search {
 
     private static Log log = LogFactoryUtil.getLog(IndexSearcher.class);
+
+    private ResourceRequest request;
+    private String pattern;
+    private String[] entryClassNames;
+    private int maximumSearchResults;
+    private ResourceResponse response;
+
+    public IndexSearcher(ResourceRequest request, String pattern, String[] entryClassNames, int maximumSearchResults,
+	    ResourceResponse response) {
+	this.request = request;
+	this.pattern = pattern;
+	this.entryClassNames = entryClassNames;
+	this.maximumSearchResults = maximumSearchResults;
+    }
 
     public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames,
 	    int maximumSearchResults) throws SearchException {
@@ -53,5 +70,11 @@ public class IndexSearcher {
 
 	return documents;
 
+    }
+
+    @Override
+    public List<ResultModel> getResult() throws Exception {
+	List<Document> result = search(request, pattern, entryClassNames, maximumSearchResults);
+	return new ResultModelBuilder(Utils.getThemeDisplay(request), request, response).buildList(result);
     }
 }

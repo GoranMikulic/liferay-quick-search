@@ -9,8 +9,8 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import mikugo.dev.search.helper.AssetTypes;
+import mikugo.dev.search.helper.DynamicQuerySearcher;
 import mikugo.dev.search.helper.IndexSearcher;
-import mikugo.dev.search.helper.ResultModelBuilder;
 import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.model.ResultModel;
 
@@ -18,7 +18,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -26,7 +25,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
  * 
- * Portlet-Controller-Class, handles the requests from the UI 
+ * Portlet-Controller-Class, handles the requests from the UI
  * 
  * @author mikugo
  *
@@ -56,27 +55,39 @@ public class SearchController extends MVCPortlet {
 
 	PortletPreferences preferences = request.getPreferences();
 	String[] assetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames());
-	
-	//check if pattern has a facet prefix and manipulate search
-	if(pattern.contains(":")){
+
+	boolean isCustomAssetSearch = false;
+
+	// check if pattern has a facet prefix and manipulate search
+	if (pattern.contains(":")) {
 	    String prefix = pattern.substring(0, pattern.indexOf(":"));
 	    log.debug(prefix);
-	    
+
 	    String className = AssetTypes.getClassName(prefix);
 	    log.debug(className);
-	    
-	    if(className != null && ArrayUtil.contains(assetTypes, className)) {
-		assetTypes = new String[]{className};
-		pattern = pattern.substring(pattern.indexOf(":")+1).trim();
+
+	    if (className != null && ArrayUtil.contains(assetTypes, className)) {
+		assetTypes = new String[] { className };
+		pattern = pattern.substring(pattern.indexOf(":") + 1).trim();
+
+		if (className.equals(AssetTypes.SITE.getClassName())
+			|| className.equals(AssetTypes.LAYOUT.getClassName())) {
+		    isCustomAssetSearch = true;
+		}
 	    }
 	}
-	
+
 	int maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
 		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
 
-	List<Document> result = new IndexSearcher().search(request, pattern, assetTypes, maximumSearchResults);
-	List<ResultModel> resultModelList = new ResultModelBuilder(Utils.getThemeDisplay(request), request, response)
-		.buildList(result);
+	List<ResultModel> resultModelList;
+
+	if (!isCustomAssetSearch) {
+	    resultModelList = new IndexSearcher(request, pattern, assetTypes, maximumSearchResults, response)
+		    .getResult();
+	} else {
+	    resultModelList = new DynamicQuerySearcher(assetTypes[0], pattern, maximumSearchResults).getResult();
+	}
 
 	ObjectMapper mapper = new ObjectMapper();
 	mapper.writeValue(response.getWriter(), resultModelList);

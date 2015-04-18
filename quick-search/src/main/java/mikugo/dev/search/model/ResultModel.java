@@ -16,6 +16,14 @@ public class ResultModel {
     private String assetType;
     private String metadata;
 
+    public ResultModel(String title, String summary, String displayUrl, String assetType, String metadata) {
+	this.title = title;
+	this.summary = summary;
+	this.displayUrl = displayUrl;
+	this.assetType = assetType;
+	this.metadata = this.metadata;
+    }
+    
     public ResultModel(Result result) {
 
 	setTitle(result.getEntryTitle());

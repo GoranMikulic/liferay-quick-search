@@ -8,7 +8,8 @@ public enum AssetTypes {
 	    "com.liferay.portlet.bookmarks.model.BookmarksEntry"), BLOGS_ENTRY("blog",
 	    "com.liferay.portlet.blogs.model.BlogsEntry"), MBM_MESSAGE("message-board-messages",
 	    "com.liferay.portlet.messageboards.model.MBMessage"), WIKI_PAGE("wiki-page",
-	    "com.liferay.portlet.wiki.model.WikiPage");
+	    "com.liferay.portlet.wiki.model.WikiPage"), SITE("site", "com.liferay.portal.model.Group"), LAYOUT(
+	    "layout", "com.liferay.portal.model.Layout");
 
     private String readableName;
     private String className;
