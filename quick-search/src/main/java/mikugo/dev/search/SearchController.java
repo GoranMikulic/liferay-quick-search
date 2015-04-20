@@ -1,6 +1,7 @@
 package mikugo.dev.search;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.PortletException;
@@ -14,6 +15,8 @@ import mikugo.dev.search.helper.IndexSearcher;
 import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.model.ResultModel;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.liferay.portal.kernel.log.Log;
@@ -40,18 +43,13 @@ public class SearchController extends MVCPortlet {
 
 	if (resourceRequest.getParameter("action").equals("search")) {
 
-	    try {
-		serveResults(resourceRequest, resourceResponse, resourceRequest.getParameter("pattern"));
-	    } catch (SearchException e) {
-		log.error(e);
-	    } catch (Exception e) {
-		log.error(e);
-	    }
+	    serveResults(resourceRequest, resourceResponse, resourceRequest.getParameter("pattern"));
 
 	}
     }
 
-    public void serveResults(ResourceRequest request, ResourceResponse response, String pattern) throws Exception {
+    public void serveResults(ResourceRequest request, ResourceResponse response, String pattern)
+	    throws JsonGenerationException, JsonMappingException, IOException {
 
 	PortletPreferences preferences = request.getPreferences();
 	String[] assetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames());
@@ -80,15 +78,29 @@ public class SearchController extends MVCPortlet {
 	List<ResultModel> resultModelList;
 
 	if (!isCustomAssetSearch) {
-	    //remove asset types which are not for index search
-	    //TODO: this should be refacotred
+	    // remove asset types which are not for index search
+	    // TODO: this should be refacotred
 	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.SITE.getClassName());
 	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.LAYOUT.getClassName());
-	    resultModelList = new IndexSearcher(request, pattern, assetTypes, maximumSearchResults, response)
-		    .getResult();
+
+	    try {
+		resultModelList = new IndexSearcher(request, pattern, assetTypes, maximumSearchResults, response)
+			.getResult();
+	    } catch (Exception e) {
+		resultModelList = new ArrayList<ResultModel>();
+		log.error(e);
+	    }
 	} else {
-	    resultModelList = new DynamicQuerySearcher(assetTypes[0], pattern, maximumSearchResults,
-		    Utils.getThemeDisplay(request)).getResult();
+	    try {
+		resultModelList = new DynamicQuerySearcher(assetTypes[0], pattern, maximumSearchResults,
+			Utils.getThemeDisplay(request)).getResult();
+	    } catch (SearchException e) {
+		resultModelList = new ArrayList<ResultModel>();
+		log.error(e);
+	    } catch (Exception e) {
+		resultModelList = new ArrayList<ResultModel>();
+		log.error(e);
+	    }
 	}
 
 	ObjectMapper mapper = new ObjectMapper();

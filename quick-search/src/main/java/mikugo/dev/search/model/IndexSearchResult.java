@@ -76,7 +76,7 @@ public class IndexSearchResult {
 	    }
 
 	    assetEntry = AssetEntryLocalServiceUtil.getEntry(className, classPK);
-
+	    
 	    assetRenderer = assetRendererFactory.getAssetRenderer(classPK);
 
 	    viewFullContentURL = getViewFullContentURL(request, themeDisplay, PortletKeys.ASSET_PUBLISHER, document);
