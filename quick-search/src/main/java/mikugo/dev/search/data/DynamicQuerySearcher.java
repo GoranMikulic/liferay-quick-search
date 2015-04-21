@@ -1,4 +1,4 @@
-package mikugo.dev.search.helper;
+package mikugo.dev.search.data;
 
 import java.util.List;
 
@@ -8,7 +8,6 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.search.SearchException;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
 public class DynamicQuerySearcher implements Search {

@@ -1,8 +1,9 @@
-package mikugo.dev.search.helper;
+package mikugo.dev.search.data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;

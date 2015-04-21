@@ -1,4 +1,4 @@
-package mikugo.dev.search.helper;
+package mikugo.dev.search.data;
 
 import java.util.ArrayList;
 import java.util.List;

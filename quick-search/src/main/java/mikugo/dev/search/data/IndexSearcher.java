@@ -1,10 +1,11 @@
-package mikugo.dev.search.helper;
+package mikugo.dev.search.data;
 
 import java.util.List;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.log.Log;

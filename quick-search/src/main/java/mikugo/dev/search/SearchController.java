@@ -9,9 +9,9 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import mikugo.dev.search.data.DynamicQuerySearcher;
+import mikugo.dev.search.data.IndexSearcher;
 import mikugo.dev.search.helper.AssetTypes;
-import mikugo.dev.search.helper.DynamicQuerySearcher;
-import mikugo.dev.search.helper.IndexSearcher;
 import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.model.ResultModel;
 
