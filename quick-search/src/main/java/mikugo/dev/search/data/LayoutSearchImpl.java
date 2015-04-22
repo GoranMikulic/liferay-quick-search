@@ -35,7 +35,7 @@ public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Sear
 	List<ResultModel> resultModel = new ArrayList<ResultModel>();
 
 	for (Layout layout : result) {
-
+	    //TODO: PermissionCheker funktioniert nicht
 	    if (themeDisplay.getPermissionChecker().hasPermission(layout.getGroupId(), layout.getClass().getName(), layout.getLayoutId(),
 		    "VIEW")) {
 
