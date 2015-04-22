@@ -9,7 +9,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import mikugo.dev.search.data.DynamicQuerySearcher;
+import mikugo.dev.search.data.DynamicQueryResultBuilder;
 import mikugo.dev.search.data.IndexSearcher;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.helper.Utils;
@@ -92,8 +92,8 @@ public class SearchController extends MVCPortlet {
 	    }
 	} else {
 	    try {
-		resultModelList = new DynamicQuerySearcher(assetTypes[0], pattern, maximumSearchResults,
-			Utils.getThemeDisplay(request)).getResult();
+		resultModelList = new DynamicQueryResultBuilder(assetTypes[0], maximumSearchResults,
+			Utils.getThemeDisplay(request), pattern).getResult();
 	    } catch (SearchException e) {
 		resultModelList = new ArrayList<ResultModel>();
 		log.error(e);
