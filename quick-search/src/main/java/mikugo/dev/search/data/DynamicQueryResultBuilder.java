@@ -29,7 +29,7 @@ public class DynamicQueryResultBuilder {
 
 	if (className.equals(AssetTypes.SITE.getClassName())) {
 	    
-	    return new SiteSearchImpl(this.pattern, this.maxSearchResults, this.themeDisplay).getResult();
+	    return new GroupSearcherImpl(this.pattern, this.maxSearchResults, this.themeDisplay).getResult();
 	    
 	} else if (className.equals(AssetTypes.LAYOUT.getClassName())) {
 	    

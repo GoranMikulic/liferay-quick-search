@@ -10,7 +10,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import mikugo.dev.search.data.DynamicQueryResultBuilder;
-import mikugo.dev.search.data.IndexSearcher;
+import mikugo.dev.search.data.IndexSearcherImpl;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.model.ResultModel;
@@ -84,7 +84,7 @@ public class SearchController extends MVCPortlet {
 	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.LAYOUT.getClassName());
 
 	    try {
-		resultModelList = new IndexSearcher(request, pattern, assetTypes, maximumSearchResults, response)
+		resultModelList = new IndexSearcherImpl(request, pattern, assetTypes, maximumSearchResults, response)
 			.getResult();
 	    } catch (Exception e) {
 		resultModelList = new ArrayList<ResultModel>();

@@ -17,19 +17,20 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
-public class SiteSearchImpl extends AbstractDynamicQuerySearch implements Search {
+public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Search {
 
     private static final String CRITERION_NAME = "name";
 
-    public SiteSearchImpl(String pattern, int maxSearchResults, ThemeDisplay themeDisplay) {
+    public GroupSearcherImpl(String pattern, int maxSearchResults, ThemeDisplay themeDisplay) {
 	super(pattern, maxSearchResults, themeDisplay);
     }
 
     @Override
     public List<ResultModel> getResult() throws SystemException, PortalException, ClassNotFoundException {
-	
+	//TODO: set fuzzy search without string manipuliation
+	pattern = "%" + pattern + "%";
 	DynamicQuery query = DynamicQueryFactoryUtil.forClass(Class.forName(AssetTypes.SITE.getClassName())).add(
-		PropertyFactoryUtil.forName(CRITERION_NAME).eq(pattern));
+		PropertyFactoryUtil.forName(CRITERION_NAME).like(pattern));
 	
 	@SuppressWarnings("unchecked")
 	List<Group> result = GroupLocalServiceUtil.dynamicQuery(query, 0, this.maxSearchResults);

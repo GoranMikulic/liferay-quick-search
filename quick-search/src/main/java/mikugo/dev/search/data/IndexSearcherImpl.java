@@ -26,9 +26,9 @@ import com.liferay.portal.kernel.search.facet.Facet;
  * @author mikugo
  *
  */
-public class IndexSearcher implements Search {
+public class IndexSearcherImpl implements Search {
 
-    private static Log log = LogFactoryUtil.getLog(IndexSearcher.class);
+    private static Log log = LogFactoryUtil.getLog(IndexSearcherImpl.class);
 
     private ResourceRequest request;
     private String pattern;
@@ -36,7 +36,7 @@ public class IndexSearcher implements Search {
     private int maximumSearchResults;
     private ResourceResponse response;
 
-    public IndexSearcher(ResourceRequest request, String pattern, String[] entryClassNames, int maximumSearchResults,
+    public IndexSearcherImpl(ResourceRequest request, String pattern, String[] entryClassNames, int maximumSearchResults,
 	    ResourceResponse response) {
 	this.request = request;
 	this.pattern = pattern;
@@ -46,7 +46,10 @@ public class IndexSearcher implements Search {
 
     public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames,
 	    int maximumSearchResults) throws SearchException {
-
+	
+	//TODO: set fuzzy search without string manipuliation
+	pattern = pattern + "*";
+	
 	Indexer indexer = FacetedSearcher.getInstance();
 	SearchContext searchContext = new SearchContext();
 
@@ -63,7 +66,7 @@ public class IndexSearcher implements Search {
 	searchContext.setEnd(maximumSearchResults);
 
 	Hits hits = indexer.search(searchContext);
-
+	
 	List<Document> documents = hits.toList();
 
 	log.debug("Documents found: " + documents.size());
