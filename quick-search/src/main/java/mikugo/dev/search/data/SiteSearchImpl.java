@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
 public class SiteSearchImpl extends AbstractDynamicQuerySearch implements Search {
@@ -35,9 +36,11 @@ public class SiteSearchImpl extends AbstractDynamicQuerySearch implements Search
 	List<ResultModel> resultModel = new ArrayList<ResultModel>();
 
 	for (Group group : result) {
-	    resultModel.add(new ResultModel(group.getDescriptiveName(), group.getDescription(), "/web"
-		    + group.getFriendlyURL(), LanguageUtil.get(themeDisplay.getLocale(),
-		    AssetTypes.SITE.getReadableName()), ""));
+	    if(GroupPermissionUtil.contains(themeDisplay.getPermissionChecker(), group, "VIEW")) {		
+		resultModel.add(new ResultModel(group.getDescriptiveName(), group.getDescription(), "/web"
+			+ group.getFriendlyURL(), LanguageUtil.get(themeDisplay.getLocale(),
+			AssetTypes.SITE.getReadableName()), ""));
+	    }
 	}
 
 	return resultModel;
