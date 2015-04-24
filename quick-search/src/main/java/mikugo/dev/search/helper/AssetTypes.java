@@ -1,5 +1,8 @@
 package mikugo.dev.search.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum AssetTypes {
 
     USER("user", "com.liferay.portal.model.User"), FILEENTRY("file",
@@ -8,8 +11,8 @@ public enum AssetTypes {
 	    "com.liferay.portlet.bookmarks.model.BookmarksEntry"), BLOGS_ENTRY("blog",
 	    "com.liferay.portlet.blogs.model.BlogsEntry"), MBM_MESSAGE("message-board-messages",
 	    "com.liferay.portlet.messageboards.model.MBMessage"), WIKI_PAGE("wiki-page",
-	    "com.liferay.portlet.wiki.model.WikiPage"), SITE("site", "com.liferay.portal.model.Group"), LAYOUT(
-	    "layout", "com.liferay.portal.model.Layout");
+	    "com.liferay.portlet.wiki.model.WikiPage"), SITE("site", "com.liferay.portal.model.Group"), LAYOUT("page",
+	    "com.liferay.portal.model.Layout");
 
     private String readableName;
     private String className;
@@ -39,7 +42,30 @@ public enum AssetTypes {
     }
 
     public static String[] getAllClassNames() {
+
+	List<String> types = new ArrayList<String>();
+	for (AssetTypes type : values()) {
+	    types.add(type.className);
+	}
+	return types.toArray(new String[types.size()]);
+    }
+
+    public static String[] getIndexSearchClassNames() {
 	return new String[] { USER.className, FILEENTRY.className, JOURNAL_ARTICLE.className,
 		BOOKMARKS_ENTRY.className, BLOGS_ENTRY.className, MBM_MESSAGE.className, WIKI_PAGE.className };
+    }
+
+    public static String[] getIndexSearchReadableNames() {
+	return new String[] { USER.readableName, FILEENTRY.readableName, JOURNAL_ARTICLE.readableName,
+		BOOKMARKS_ENTRY.readableName, BLOGS_ENTRY.readableName, MBM_MESSAGE.readableName,
+		WIKI_PAGE.readableName };
+    }
+
+    public static String[] getDynamicQueryClassNames() {
+	return new String[] { SITE.className, LAYOUT.className };
+    }
+
+    public static String[] getDynamicQueryReadableNames() {
+	return new String[] { SITE.readableName, LAYOUT.readableName };
     }
 }

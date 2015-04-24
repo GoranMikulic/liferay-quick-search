@@ -3,6 +3,8 @@ package mikugo.dev.search;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
@@ -48,36 +50,59 @@ public class SearchController extends MVCPortlet {
 	}
     }
 
+    private boolean isFaceted(String pattern) {
+	// Regex should search for following pattern <type>:<keyword>
+	Pattern regex = Pattern.compile("([A-Z,a-z])+\\w:(\\s)*([A-Z,a-z])*");
+	Matcher matcher = regex.matcher(pattern);
+	return matcher.matches();
+    }
+
     public void serveResults(ResourceRequest request, ResourceResponse response, String pattern)
 	    throws JsonGenerationException, JsonMappingException, IOException {
 
 	PortletPreferences preferences = request.getPreferences();
+
 	String[] assetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames());
-
-	boolean isCustomAssetSearch = false;
-
-	// check if pattern has a facet prefix and manipulate search
-	if (pattern.contains(":")) {
-	    String prefix = pattern.substring(0, pattern.indexOf(":"));
-	    String className = AssetTypes.getClassName(prefix);
-
-	    if (className != null && ArrayUtil.contains(assetTypes, className)) {
-		assetTypes = new String[] { className };
-		pattern = pattern.substring(pattern.indexOf(":") + 1).trim();
-
-		if (className.equals(AssetTypes.SITE.getClassName())
-			|| className.equals(AssetTypes.LAYOUT.getClassName())) {
-		    isCustomAssetSearch = true;
-		}
-	    }
-	}
 
 	int maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
 		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
 
-	List<ResultModel> resultModelList;
+	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
-	if (!isCustomAssetSearch) {
+	if (isFaceted(pattern)) {
+	    String searchType = pattern.substring(0, pattern.indexOf(":"));
+	    pattern = pattern.substring(pattern.indexOf(":")+1).trim();
+	    
+	    log.info(searchType);
+
+	    if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)) {
+		log.info("starting faceted dynamic query search");
+		log.info("for class: " + AssetTypes.getClassName(searchType));
+		log.info("for pattern: " + pattern);
+		
+		try {
+		    resultModelList = new DynamicQueryResultBuilder(AssetTypes.getClassName(searchType),
+			    maximumSearchResults, Utils.getThemeDisplay(request), pattern).getResult();
+		} catch (SearchException e) {
+		    log.error(e);
+		} catch (Exception e) {
+		    log.error(e);
+		}
+	    } else if (ArrayUtil.contains(AssetTypes.getIndexSearchReadableNames(), searchType)) {
+		log.info("starting faceted index query search");
+		log.info("for class: " + AssetTypes.getClassName(searchType));
+		log.info("for pattern: " + pattern);
+		
+		try {
+		    resultModelList = new IndexSearcherImpl(request, pattern,
+			    new String[] { AssetTypes.getClassName(searchType) }, maximumSearchResults, response)
+			    .getResult();
+		} catch (Exception e) {
+		    log.error(e);
+		}
+	    }
+	} else {
+
 	    // remove asset types which are not for index search
 	    // TODO: this should be refacotred
 	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.SITE.getClassName());
@@ -87,20 +112,9 @@ public class SearchController extends MVCPortlet {
 		resultModelList = new IndexSearcherImpl(request, pattern, assetTypes, maximumSearchResults, response)
 			.getResult();
 	    } catch (Exception e) {
-		resultModelList = new ArrayList<ResultModel>();
 		log.error(e);
 	    }
-	} else {
-	    try {
-		resultModelList = new DynamicQueryResultBuilder(assetTypes[0], maximumSearchResults,
-			Utils.getThemeDisplay(request), pattern).getResult();
-	    } catch (SearchException e) {
-		resultModelList = new ArrayList<ResultModel>();
-		log.error(e);
-	    } catch (Exception e) {
-		resultModelList = new ArrayList<ResultModel>();
-		log.error(e);
-	    }
+
 	}
 
 	ObjectMapper mapper = new ObjectMapper();
