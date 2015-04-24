@@ -46,7 +46,7 @@
 		%>
 	</aui:select>
 	<aui:select name="preferences--assetTypes--"
-		label="config.minSearchLetters" multiple="true">
+		label="config.availableAssetTypes" multiple="true">
 		<%
 			Map<String, String> map = new HashMap<String, String>();
 			for(AssetTypes assetType : AssetTypes.values()){
