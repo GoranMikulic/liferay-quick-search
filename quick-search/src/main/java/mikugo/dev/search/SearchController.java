@@ -62,7 +62,8 @@ public class SearchController extends MVCPortlet {
 
 	PortletPreferences preferences = request.getPreferences();
 
-	String[] assetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES, AssetTypes.getAllClassNames());
+	String[] configuredAssetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES,
+		AssetTypes.getAllClassNames());
 
 	int maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
 		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
@@ -70,47 +71,17 @@ public class SearchController extends MVCPortlet {
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
 	if (isFaceted(pattern)) {
-	    String searchType = pattern.substring(0, pattern.indexOf(":"));
-	    pattern = pattern.substring(pattern.indexOf(":")+1).trim();
-	    
-	    log.info(searchType);
-
-	    if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)) {
-		log.info("starting faceted dynamic query search");
-		log.info("for class: " + AssetTypes.getClassName(searchType));
-		log.info("for pattern: " + pattern);
-		
-		try {
-		    resultModelList = new DynamicQueryResultBuilder(AssetTypes.getClassName(searchType),
-			    maximumSearchResults, Utils.getThemeDisplay(request), pattern).getResult();
-		} catch (SearchException e) {
-		    log.error(e);
-		} catch (Exception e) {
-		    log.error(e);
-		}
-	    } else if (ArrayUtil.contains(AssetTypes.getIndexSearchReadableNames(), searchType)) {
-		log.info("starting faceted index query search");
-		log.info("for class: " + AssetTypes.getClassName(searchType));
-		log.info("for pattern: " + pattern);
-		
-		try {
-		    resultModelList = new IndexSearcherImpl(request, pattern,
-			    new String[] { AssetTypes.getClassName(searchType) }, maximumSearchResults, response)
-			    .getResult();
-		} catch (Exception e) {
-		    log.error(e);
-		}
-	    }
+	    resultModelList = doFacetedSearch(request, response, pattern, maximumSearchResults, resultModelList,
+		    configuredAssetTypes);
 	} else {
 
-	    // remove asset types which are not for index search
-	    // TODO: this should be refacotred
-	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.SITE.getClassName());
-	    assetTypes = ArrayUtil.remove(assetTypes, AssetTypes.LAYOUT.getClassName());
+	    for (String dynQueryClassName : AssetTypes.getDynamicQueryClassNames()) {
+		ArrayUtil.remove(configuredAssetTypes, dynQueryClassName);
+	    }
 
 	    try {
-		resultModelList = new IndexSearcherImpl(request, pattern, assetTypes, maximumSearchResults, response)
-			.getResult();
+		resultModelList = new IndexSearcherImpl(request, pattern, configuredAssetTypes, maximumSearchResults,
+			response).getResult();
 	    } catch (Exception e) {
 		log.error(e);
 	    }
@@ -120,5 +91,36 @@ public class SearchController extends MVCPortlet {
 	ObjectMapper mapper = new ObjectMapper();
 	mapper.writeValue(response.getWriter(), resultModelList);
 	response.getWriter().flush();
+    }
+
+    private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern,
+	    int maximumSearchResults, List<ResultModel> resultModelList, String[] configuredAssetTypes) {
+
+	String searchType = pattern.substring(0, pattern.indexOf(":"));
+	pattern = pattern.substring(pattern.indexOf(":") + 1).trim();
+
+	if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)
+		&& ArrayUtil.contains(AssetTypes.getReadableNames(configuredAssetTypes), searchType)) {
+
+	    try {
+		resultModelList = new DynamicQueryResultBuilder(AssetTypes.getClassName(searchType),
+			maximumSearchResults, Utils.getThemeDisplay(request), pattern).getResult();
+	    } catch (SearchException e) {
+		log.error(e);
+	    } catch (Exception e) {
+		log.error(e);
+	    }
+	} else if (ArrayUtil.contains(AssetTypes.getIndexSearchReadableNames(), searchType)
+		&& ArrayUtil.contains(AssetTypes.getReadableNames(configuredAssetTypes), searchType)) {
+
+	    try {
+		resultModelList = new IndexSearcherImpl(request, pattern,
+			new String[] { AssetTypes.getClassName(searchType) }, maximumSearchResults, response)
+			.getResult();
+	    } catch (Exception e) {
+		log.error(e);
+	    }
+	}
+	return resultModelList;
     }
 }

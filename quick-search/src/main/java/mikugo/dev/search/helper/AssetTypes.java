@@ -41,6 +41,26 @@ public enum AssetTypes {
 	return null;
     }
 
+    public static String getReadableName(String className) {
+	for (AssetTypes type : AssetTypes.values()) {
+	    if (className.equals(type.className)) {
+		return type.readableName;
+	    }
+	}
+
+	return null;
+    }
+
+    public static String[] getReadableNames(String[] classNames) {
+	String[] readableNames = new String[classNames.length];
+
+	for (int i = 0; i < classNames.length; i++) {
+	    readableNames[i] = getReadableName(classNames[i]);
+	}
+
+	return readableNames;
+    }
+
     public static String[] getAllClassNames() {
 
 	List<String> types = new ArrayList<String>();
