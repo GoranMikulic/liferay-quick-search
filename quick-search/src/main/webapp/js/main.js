@@ -125,7 +125,7 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 			if (!isInCache(searchPattern)) {
 				$.ajax({
 					type : "POST",
-					async : false,
+					async : true,
 					dataType : "json",
 					url : ajaxURL,
 					data : {
