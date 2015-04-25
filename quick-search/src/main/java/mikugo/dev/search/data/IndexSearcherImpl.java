@@ -17,13 +17,9 @@ import com.liferay.portal.kernel.search.FacetedSearcher;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
-import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.facet.AssetEntriesFacet;
 import com.liferay.portal.kernel.search.facet.Facet;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
 /**
@@ -62,8 +58,9 @@ public class IndexSearcherImpl implements Search {
 
 	searchContext.setEntryClassNames(entryClassNames);
 	Facet assetEntriesFacet = new AssetEntriesFacet(searchContext);
-
+	
 	assetEntriesFacet.setStatic(true);
+	
 	searchContext.setGroupIds(getGroupIds(Utils.getThemeDisplay(request)));
 	searchContext.addFacet(assetEntriesFacet);
 	searchContext.setKeywords(pattern);

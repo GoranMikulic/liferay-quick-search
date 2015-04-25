@@ -122,7 +122,7 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 			searchPattern = $.trim(searchPattern).replace(/ {2,}/g, ' ');
 			// If the search pattern is not in the cache make an ajax call to
 			// get the contacts
-			if (!isInCache(searchPattern)) {
+			//if (!isInCache(searchPattern)) {
 				$.ajax({
 					type : "POST",
 					async : true,
@@ -137,10 +137,10 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 						comboBox(results);// To display the suggestions
 					}
 				});
-			} else {
+			//} else {
 				// To sort suggestions of the cache
-				comboBox(sortResults(searchPattern));
-			}
+			//	comboBox(sortResults(searchPattern));
+			//}
 		};
 	}
 
