@@ -20,9 +20,20 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 public class UserResultModel extends ResultModel {
 
     private static Log log = LogFactoryUtil.getLog(UserResultModel.class);
+    private User user;
 
     public UserResultModel(IndexSearchResult result) {
 	super(result);
+	try {
+	    this.user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
+	    setDisplayUrl(user.getDisplayURL(result.getThemeDisplay()));
+	} catch (PortalException e) {
+	    setDisplayUrl("mailto:" + user.getDisplayEmailAddress());
+	    log.error(e);
+	} catch (SystemException e) {
+	    setDisplayUrl("mailto:" + user.getDisplayEmailAddress());
+	    log.error(e);
+	}
     }
 
     @Override
