@@ -21,6 +21,8 @@ public class ResultModelFactory {
 
 	if (AssetTypes.USER.getClassName().equals(entryType)) {
 	    return new UserResultModel(result);
+	} else if (AssetTypes.MBM_MESSAGE.getClassName().equals(entryType)) {
+	    return new MbMessageResultModel(result);
 	} else {
 	    return new ResultModel(result);
 	    

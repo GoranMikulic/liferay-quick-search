@@ -26,7 +26,7 @@ public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Sear
 
     @Override
     public List<ResultModel> getResult() throws SearchException, Exception {
-	//TODO: set fuzzy search without string manipuliation
+	// TODO: set fuzzy search without string manipuliation
 	pattern = "%" + pattern + "%";
 	DynamicQuery query = DynamicQueryFactoryUtil.forClass(Class.forName(AssetTypes.LAYOUT.getClassName())).add(
 		PropertyFactoryUtil.forName(CRITERION_FRIENDLYURL).like(this.pattern));
@@ -38,11 +38,13 @@ public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Sear
 
 	for (Layout layout : result) {
 
-	    if (LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout.getPlid(), "VIEW")) {
+	    if (LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout.getPlid(), "VIEW")
+		    && layout.getGroup().isSite()) {
 
-		resultModel.add(new ResultModel(layout.getName(), layout.getDescription(), layout.getFriendlyURL(),
-			LanguageUtil.get(themeDisplay.getLocale(), AssetTypes.LAYOUT.getReadableName()), layout
-				.getGroup().getDescriptiveName()));
+		resultModel.add(new ResultModel(layout.getName(), layout.getDescription(), "/web"
+			+ layout.getGroup().getFriendlyURL() + layout.getFriendlyURL(), LanguageUtil.get(
+			themeDisplay.getLocale(), AssetTypes.LAYOUT.getReadableName()), layout.getGroup()
+			.getDescriptiveName()));
 	    }
 	}
 	return resultModel;

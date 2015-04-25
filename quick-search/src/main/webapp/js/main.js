@@ -148,7 +148,7 @@ function autocompleteAjax(ajaxURL, inputField, minLetters) {
 	$(inputField).typeahead(
 			{
 				hint : true,
-				highlight : true,
+				highlight : false,
 				minLength : minLetters
 			},
 			{

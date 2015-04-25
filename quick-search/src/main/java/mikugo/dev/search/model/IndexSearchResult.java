@@ -76,7 +76,7 @@ public class IndexSearchResult {
 	    }
 
 	    assetEntry = AssetEntryLocalServiceUtil.getEntry(className, classPK);
-	    
+
 	    assetRenderer = assetRendererFactory.getAssetRenderer(classPK);
 
 	    viewFullContentURL = getViewFullContentURL(request, themeDisplay, PortletKeys.ASSET_PUBLISHER, document);
@@ -104,7 +104,8 @@ public class IndexSearchResult {
 		viewURL = assetRenderer.getURLViewInContext((LiferayPortletRequest) request,
 			(LiferayPortletResponse) response, viewFullContentURLString);
 
-		groupName = GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getName();
+		groupName = GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getDescriptiveName(
+			themeDisplay.getLocale());
 
 	    } else {
 		viewURL = viewFullContentURL.toString();
