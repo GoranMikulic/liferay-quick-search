@@ -52,7 +52,7 @@ public class SearchController extends MVCPortlet {
 
     private boolean isFaceted(String pattern) {
 	// Regex should search for following pattern <type>:<keyword>
-	Pattern regex = Pattern.compile("([A-Z,a-z])+\\w:(\\s)*([A-Z,a-z])*");
+	Pattern regex = Pattern.compile("([A-Z,a-z])+\\w:((\\s)*([A-Z,a-z])*)*");
 	Matcher matcher = regex.matcher(pattern);
 	return matcher.matches();
     }

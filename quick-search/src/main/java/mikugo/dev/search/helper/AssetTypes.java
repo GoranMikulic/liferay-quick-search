@@ -9,7 +9,7 @@ public enum AssetTypes {
 	    "com.liferay.portlet.documentlibrary.model.DLFileEntry"), JOURNAL_ARTICLE("article",
 	    "com.liferay.portlet.journal.model.JournalArticle"), BOOKMARKS_ENTRY("bookmark",
 	    "com.liferay.portlet.bookmarks.model.BookmarksEntry"), BLOGS_ENTRY("blog",
-	    "com.liferay.portlet.blogs.model.BlogsEntry"), MBM_MESSAGE("message-board-messages",
+	    "com.liferay.portlet.blogs.model.BlogsEntry"), MBM_MESSAGE("mbmessage",
 	    "com.liferay.portlet.messageboards.model.MBMessage"), WIKI_PAGE("wiki-page",
 	    "com.liferay.portlet.wiki.model.WikiPage"), SITE("site", "com.liferay.portal.model.Group"), LAYOUT("page",
 	    "com.liferay.portal.model.Layout");
