@@ -27,24 +27,34 @@ public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Sea
 
     @Override
     public List<ResultModel> getResult() throws SystemException, PortalException, ClassNotFoundException {
-	//TODO: set fuzzy search without string manipuliation
+	// TODO: set fuzzy search without string manipuliation
 	pattern = "%" + pattern + "%";
 	DynamicQuery query = DynamicQueryFactoryUtil.forClass(Class.forName(AssetTypes.SITE.getClassName())).add(
 		PropertyFactoryUtil.forName(CRITERION_NAME).like(pattern));
-	
+
 	@SuppressWarnings("unchecked")
 	List<Group> result = GroupLocalServiceUtil.dynamicQuery(query, 0, this.maxSearchResults);
 	List<ResultModel> resultModel = new ArrayList<ResultModel>();
 
 	for (Group group : result) {
-	    if(GroupPermissionUtil.contains(themeDisplay.getPermissionChecker(), group, "VIEW")) {		
-		resultModel.add(new ResultModel(group.getDescriptiveName(), group.getDescription(), "/web"
-			+ group.getFriendlyURL(), LanguageUtil.get(themeDisplay.getLocale(),
-			AssetTypes.SITE.getReadableName()), ""));
+	    if (GroupPermissionUtil.contains(themeDisplay.getPermissionChecker(), group, "VIEW")
+		    && !group.getFriendlyURL().equals("/global") && group.isSite()) {
+		String url = getGroupUrl(group);
+
+		resultModel.add(new ResultModel(group.getDescriptiveName(), group.getDescription(), url, LanguageUtil
+			.get(themeDisplay.getLocale(), AssetTypes.SITE.getReadableName()), ""));
+
 	    }
 	}
 
 	return resultModel;
     }
 
+    private String getGroupUrl(Group group) {
+	if (group.isControlPanel() || !group.hasPublicLayouts()) {
+	    return "/group" + group.getFriendlyURL();
+	} else {
+	    return "/web" + group.getFriendlyURL();
+	}
+    }
 }

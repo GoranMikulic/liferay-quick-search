@@ -40,8 +40,10 @@ public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Sear
 
 	    if (LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout.getPlid(), "VIEW")
 		    && layout.getGroup().isSite()) {
-
-		resultModel.add(new ResultModel(layout.getName(), layout.getDescription(), "/web"
+		
+		String layoutUrlPrefix = layout.isPrivateLayout() ? "/group" : "/web";
+		
+		resultModel.add(new ResultModel(layout.getName(), layout.getDescription(), layoutUrlPrefix
 			+ layout.getGroup().getFriendlyURL() + layout.getFriendlyURL(), LanguageUtil.get(
 			themeDisplay.getLocale(), AssetTypes.LAYOUT.getReadableName()), layout.getGroup()
 			.getDescriptiveName()));
