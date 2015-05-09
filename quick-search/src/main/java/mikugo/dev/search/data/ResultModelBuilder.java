@@ -14,6 +14,13 @@ import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.theme.ThemeDisplay;
 
+/**
+ * This class is responsible for mapping of lucene search results
+ * {@link Document} to {@link ResultModel} used for representation in GUI
+ * 
+ * @author mikugo
+ *
+ */
 public class ResultModelBuilder {
 
     private ThemeDisplay themeDisplay;

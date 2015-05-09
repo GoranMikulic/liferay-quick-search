@@ -23,8 +23,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.theme.ThemeDisplay;
 
 /**
- * This class is responsible to build process the search and serve the results.
- * Connection between Portlet and Liferay Search API
+ * Search Implementation for a Liferay index search
  * 
  * @author mikugo
  *
@@ -39,6 +38,17 @@ public class IndexSearcherImpl implements Search {
     private int maximumSearchResults;
     private ResourceResponse response;
 
+    /**
+     * Default constructor
+     * 
+     * @param request
+     * @param pattern
+     * @param entryClassNames
+     *            - ClassNames of asset types to search
+     * @param maximumSearchResults
+     *            - Amount of maximum search result
+     * @param response
+     */
     public IndexSearcherImpl(ResourceRequest request, String pattern, String[] entryClassNames,
 	    int maximumSearchResults, ResourceResponse response) {
 	this.request = request;
@@ -47,6 +57,17 @@ public class IndexSearcherImpl implements Search {
 	this.maximumSearchResults = maximumSearchResults;
     }
 
+    /**
+     * Processing search and returns a List of {@link Document}
+     * 
+     * @param request
+     * @param pattern
+     * @param entryClassNames
+     * @param maximumSearchResults
+     * @return A List of {@link Document}
+     * @throws SystemException
+     * @throws PortalException
+     */
     public List<Document> search(ResourceRequest request, String pattern, String[] entryClassNames,
 	    int maximumSearchResults) throws SystemException, PortalException {
 
@@ -58,9 +79,9 @@ public class IndexSearcherImpl implements Search {
 
 	searchContext.setEntryClassNames(entryClassNames);
 	Facet assetEntriesFacet = new AssetEntriesFacet(searchContext);
-	
+
 	assetEntriesFacet.setStatic(true);
-	
+
 	searchContext.setGroupIds(getGroupIds(Utils.getThemeDisplay(request)));
 	searchContext.addFacet(assetEntriesFacet);
 	searchContext.setKeywords(pattern);
@@ -80,6 +101,14 @@ public class IndexSearcherImpl implements Search {
 
     }
 
+    /**
+     * Returns the groupIDs of the themeDisplays users groups (sites)
+     * 
+     * @param themeDisplay
+     * @return The groupIDs of the themeDisplays users groups (sites)
+     * @throws SystemException
+     * @throws PortalException
+     */
     private long[] getGroupIds(ThemeDisplay themeDisplay) throws SystemException, PortalException {
 
 	List<Group> groups = themeDisplay.getUser().getMySiteGroups();
@@ -92,6 +121,9 @@ public class IndexSearcherImpl implements Search {
 	return groupIds;
     }
 
+    /**
+     * Returns a list of {@link ResultModel}
+     */
     @Override
     public List<ResultModel> getResult() throws Exception {
 	List<Document> result = search(request, pattern, entryClassNames, maximumSearchResults);

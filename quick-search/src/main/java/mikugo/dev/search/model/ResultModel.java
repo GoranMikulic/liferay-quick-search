@@ -1,9 +1,8 @@
 package mikugo.dev.search.model;
 
-import com.liferay.portlet.asset.model.AssetEntry;
 
 /**
- * This class represents a result model for {@link AssetEntry}
+ * Model class for search results
  * 
  * @author mikugo
  *
@@ -23,7 +22,7 @@ public class ResultModel {
 	this.assetType = assetType;
 	this.metadata = metadata;
     }
-    
+
     public ResultModel(IndexSearchResult result) {
 
 	setTitle(result.getEntryTitle());

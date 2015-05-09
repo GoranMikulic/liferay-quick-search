@@ -12,7 +12,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
- * This class represents a result model for {@link User}
+ * This class represents a result model for Users
  * 
  * @author mikugo
  *
@@ -52,7 +52,6 @@ public class UserResultModel extends ResultModel {
 		    sb.append(phone);
 		}
 	    }
-
 	    setMetadata(sb.toString());
 	} catch (PortalException e) {
 	    setMetadata("");

@@ -17,6 +17,12 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
+/**
+ * Implementation for a {@link Group} search
+ * 
+ * @author mikugo
+ *
+ */
 public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Search {
 
     private static final String CRITERION_NAME = "name";
@@ -50,6 +56,12 @@ public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Sea
 	return resultModel;
     }
 
+    /**
+     * Retruns landing page url of a {@link Group}
+     * 
+     * @param group
+     * @return Landing page url of a {@link Group}
+     */
     private String getGroupUrl(Group group) {
 	if (group.isControlPanel() || !group.hasPublicLayouts()) {
 	    return "/group" + group.getFriendlyURL();

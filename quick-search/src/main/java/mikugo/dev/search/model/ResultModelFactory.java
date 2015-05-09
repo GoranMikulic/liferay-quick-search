@@ -9,7 +9,7 @@ import mikugo.dev.search.helper.AssetTypes;
  *
  */
 public class ResultModelFactory {
-    
+
     /**
      * Delegates Mapping to specific model class
      * 
@@ -25,8 +25,6 @@ public class ResultModelFactory {
 	    return new MbMessageResultModel(result);
 	} else {
 	    return new ResultModel(result);
-	    
 	}
-
     }
 }

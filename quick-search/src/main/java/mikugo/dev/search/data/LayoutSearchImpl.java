@@ -16,6 +16,12 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
+/**
+ * Implementation for a {@link Layout} search
+ * 
+ * @author mikugo
+ *
+ */
 public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Search {
 
     private static final String CRITERION_FRIENDLYURL = "friendlyURL";
@@ -40,9 +46,9 @@ public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Sear
 
 	    if (LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout.getPlid(), "VIEW")
 		    && layout.getGroup().isSite()) {
-		
+
 		String layoutUrlPrefix = layout.isPrivateLayout() ? "/group" : "/web";
-		
+
 		resultModel.add(new ResultModel(layout.getName(), layout.getDescription(), layoutUrlPrefix
 			+ layout.getGroup().getFriendlyURL() + layout.getFriendlyURL(), LanguageUtil.get(
 			themeDisplay.getLocale(), AssetTypes.LAYOUT.getReadableName()), layout.getGroup()

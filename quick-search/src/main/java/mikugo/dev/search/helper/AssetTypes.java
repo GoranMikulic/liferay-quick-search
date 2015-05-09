@@ -3,6 +3,12 @@ package mikugo.dev.search.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Enumartaion class for the available search asset types
+ * 
+ * @author mikugo
+ *
+ */
 public enum AssetTypes {
 
     USER("user", "com.liferay.portal.model.User"), FILEENTRY("file",

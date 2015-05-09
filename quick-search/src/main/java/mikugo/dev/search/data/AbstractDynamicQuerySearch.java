@@ -1,7 +1,14 @@
 package mikugo.dev.search.data;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.theme.ThemeDisplay;
 
+/**
+ * Abstract class for a search via Liferay {@link DynamicQuery} API
+ * 
+ * @author mikugo
+ *
+ */
 public abstract class AbstractDynamicQuerySearch {
 
     protected String pattern;

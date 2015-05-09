@@ -5,8 +5,14 @@ import javax.portlet.PortletRequest;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 
+/**
+ * Util Class for quick search project
+ * 
+ * @author mikugo
+ *
+ */
 public class Utils {
-    
+
     public static final String CONFIGURATION_KEY_CONTROLLED = "keyControlled";
     public static final String CONFIGURATION_MIN_SEARCH_LETTERS = "minSearchLetters";
     public static final String CONFIGURATION_ASSET_TYPES = "assetTypes";

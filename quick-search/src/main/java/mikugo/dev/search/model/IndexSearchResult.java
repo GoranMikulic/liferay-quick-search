@@ -35,7 +35,7 @@ import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 
 /**
- * Respresenting results from liferay search api, searchin the index
+ * Respresenting results from liferay search api, searching the index
  * 
  * @author mikugo
  *

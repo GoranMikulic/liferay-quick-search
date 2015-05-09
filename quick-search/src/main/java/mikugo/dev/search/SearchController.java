@@ -38,6 +38,9 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 public class SearchController extends MVCPortlet {
     private static Log log = LogFactoryUtil.getLog(SearchController.class);
 
+    /**
+     * Mapping requests
+     */
     @Override
     public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
 	    PortletException {
@@ -50,6 +53,12 @@ public class SearchController extends MVCPortlet {
 	}
     }
 
+    /**
+     * Checks if the search keyword contains the pattern <type>:<keyword>
+     * 
+     * @param pattern
+     * @return
+     */
     private boolean isFaceted(String pattern) {
 	// Regex should search for following pattern <type>:<keyword>
 	Pattern regex = Pattern.compile("([A-Z,a-z])+\\w:((\\s)*([A-Z,a-z])*)*");
@@ -57,6 +66,17 @@ public class SearchController extends MVCPortlet {
 	return matcher.matches();
     }
 
+    /**
+     * Initializing search and serving results for UI
+     * 
+     * @param request
+     * @param response
+     * @param pattern
+     *            - The search pattern
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
     public void serveResults(ResourceRequest request, ResourceResponse response, String pattern)
 	    throws JsonGenerationException, JsonMappingException, IOException {
 
@@ -92,7 +112,18 @@ public class SearchController extends MVCPortlet {
 	mapper.writeValue(response.getWriter(), resultModelList);
 	response.getWriter().flush();
     }
-
+    
+    /**
+     * This method is processing the search, delegates the different search types and returns a list of {@link ResultModel}
+     * 
+     * @param request
+     * @param response
+     * @param pattern
+     * @param maximumSearchResults
+     * @param resultModelList
+     * @param configuredAssetTypes
+     * @return A list of {@link ResultModel}
+     */
     private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern,
 	    int maximumSearchResults, List<ResultModel> resultModelList, String[] configuredAssetTypes) {
 
