@@ -17,10 +17,27 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.ArrayUtil;
 
+/**
+ * This class recognizes the search type by pattern and delegates the search
+ * request to the different search implementations
+ * 
+ * @author mikugo
+ *
+ */
 public class SearchProxy {
 
     private static Log log = LogFactoryUtil.getLog(SearchProxy.class);
 
+    /**
+     * Recognizing pattern and initializing search
+     * 
+     * @param request
+     * @param response
+     * @param pattern
+     * @param configuredAssetTypes
+     * @param maximumSearchResults
+     * @return A list of {@link ResultModel}
+     */
     public List<ResultModel> search(ResourceRequest request, ResourceResponse response, String pattern,
 	    String[] configuredAssetTypes, int maximumSearchResults) {
 
@@ -54,6 +71,7 @@ public class SearchProxy {
      */
     private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern,
 	    String[] configuredAssetTypes, int maximumSearchResults) {
+
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 	// Parsing user input for search type and keyword
 	String searchType = pattern.substring(0, pattern.indexOf(":"));
@@ -65,7 +83,7 @@ public class SearchProxy {
 	if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)
 		&& searchTypeIsContainedInConfiguredTypes) {
 
-	    resultModelList = doDynamicQuerySearch(request, pattern, resultModelList, searchType, maximumSearchResults);
+	    resultModelList = doDynamicQuerySearch(request, pattern, searchType, maximumSearchResults);
 
 	} else if (ArrayUtil.contains(AssetTypes.getIndexSearchReadableNames(), searchType)
 		&& searchTypeIsContainedInConfiguredTypes) {
@@ -87,8 +105,11 @@ public class SearchProxy {
      * @param searchType
      * @return A list of {@link ResultModel}
      */
-    private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern,
-	    List<ResultModel> resultModelList, String searchType, int maximumSearchResults) {
+    private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern, String searchType,
+	    int maximumSearchResults) {
+
+	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
+
 	try {
 	    resultModelList = new DynamicQueryResultFactory(AssetTypes.getClassName(searchType), maximumSearchResults,
 		    Utils.getThemeDisplay(request), pattern).getResult();
@@ -109,7 +130,7 @@ public class SearchProxy {
      * @param assetTypes
      * @param maximumSearchResults
      * @param resultModelList
-     * @return
+     * @return A list of {@link ResultModel}
      */
     private List<ResultModel> doIndexSearch(ResourceRequest request, ResourceResponse response, String pattern,
 	    String[] assetTypes, int maximumSearchResults) {
