@@ -1,7 +1,7 @@
-package mikugo.dev.search.index.mapper;
+package mikugo.dev.search.data;
 
 import mikugo.dev.search.model.ResultModel;
 
-public interface IndexResultMapper {
+public interface ResultMapper {
     ResultModel getResultModel();
 }

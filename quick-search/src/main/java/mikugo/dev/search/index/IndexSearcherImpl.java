@@ -1,4 +1,4 @@
-package mikugo.dev.search.impl;
+package mikugo.dev.search.index;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import javax.portlet.ResourceResponse;
 
 import mikugo.dev.search.data.Search;
 import mikugo.dev.search.helper.Utils;
-import mikugo.dev.search.index.mapper.IndexResultModelBuilder;
 import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.exception.PortalException;

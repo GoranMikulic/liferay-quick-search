@@ -1,4 +1,4 @@
-package mikugo.dev.search.index.mapper;
+package mikugo.dev.search.index;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.List;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import mikugo.dev.search.model.IndexResultModelFactory;
-import mikugo.dev.search.model.IndexResultResourcesModel;
 import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.search.Document;

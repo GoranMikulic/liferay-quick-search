@@ -1,10 +1,11 @@
 package mikugo.dev.search.index.mapper;
 
+import mikugo.dev.search.data.ResultMapper;
 import mikugo.dev.search.helper.LiferayIndexSearchResultProcessor;
-import mikugo.dev.search.model.IndexResultResourcesModel;
+import mikugo.dev.search.index.IndexResultResourcesModel;
 import mikugo.dev.search.model.ResultModel;
 
-public class IndexResultMapperImpl implements IndexResultMapper {
+public class IndexResultMapperImpl implements ResultMapper {
 
     protected LiferayIndexSearchResultProcessor processor;
 

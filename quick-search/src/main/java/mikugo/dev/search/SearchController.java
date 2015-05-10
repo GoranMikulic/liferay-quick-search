@@ -9,11 +9,11 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import mikugo.dev.search.data.DynamicQueryResult;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.helper.Utils;
-import mikugo.dev.search.impl.IndexSearcherImpl;
+import mikugo.dev.search.index.IndexSearcherImpl;
 import mikugo.dev.search.model.ResultModel;
+import mikugo.dev.search.query.DynamicQueryResultFactory;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -177,7 +177,7 @@ public class SearchController extends MVCPortlet {
     private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern,
 	    List<ResultModel> resultModelList, String searchType) {
 	try {
-	    resultModelList = new DynamicQueryResult(AssetTypes.getClassName(searchType), maximumSearchResults,
+	    resultModelList = new DynamicQueryResultFactory(AssetTypes.getClassName(searchType), maximumSearchResults,
 		    Utils.getThemeDisplay(request), pattern).getResult();
 	} catch (SearchException e) {
 	    log.error(e);

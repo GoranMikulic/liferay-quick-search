@@ -1,10 +1,8 @@
-package mikugo.dev.search.data;
+package mikugo.dev.search.query;
 
 import java.util.List;
 
 import mikugo.dev.search.helper.AssetTypes;
-import mikugo.dev.search.impl.GroupSearcherImpl;
-import mikugo.dev.search.impl.LayoutSearchImpl;
 import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.theme.ThemeDisplay;
@@ -15,7 +13,7 @@ import com.liferay.portal.theme.ThemeDisplay;
  * @author mikugo
  *
  */
-public class DynamicQueryResult {
+public class DynamicQueryResultFactory {
 
     private String className;
     private int maxSearchResults;
@@ -26,13 +24,12 @@ public class DynamicQueryResult {
     /**
      * Constructor
      */
-    public DynamicQueryResult(String className, int maxSearchResults, ThemeDisplay themeDisplay, String pattern)
+    public DynamicQueryResultFactory(String className, int maxSearchResults, ThemeDisplay themeDisplay, String pattern)
 	    throws Exception {
 
 	this.className = className;
 	this.maxSearchResults = maxSearchResults;
 	this.themeDisplay = themeDisplay;
-
 	this.pattern = pattern;
     }
 

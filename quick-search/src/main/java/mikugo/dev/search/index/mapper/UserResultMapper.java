@@ -2,7 +2,7 @@ package mikugo.dev.search.index.mapper;
 
 import java.util.List;
 
-import mikugo.dev.search.model.IndexResultResourcesModel;
+import mikugo.dev.search.index.IndexResultResourcesModel;
 import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.exception.PortalException;

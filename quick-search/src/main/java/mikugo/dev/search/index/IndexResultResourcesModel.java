@@ -1,4 +1,4 @@
-package mikugo.dev.search.model;
+package mikugo.dev.search.index;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;

@@ -1,9 +1,10 @@
-package mikugo.dev.search.model;
+package mikugo.dev.search.index;
 
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.index.mapper.IndexResultMapperImpl;
 import mikugo.dev.search.index.mapper.MbMessageResultMapper;
 import mikugo.dev.search.index.mapper.UserResultMapper;
+import mikugo.dev.search.model.ResultModel;
 
 /**
  * Factory class for {@link ResultModel} Types

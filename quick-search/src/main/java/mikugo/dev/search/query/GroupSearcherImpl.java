@@ -1,9 +1,8 @@
-package mikugo.dev.search.impl;
+package mikugo.dev.search.query;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mikugo.dev.search.data.AbstractDynamicQuerySearch;
 import mikugo.dev.search.data.Search;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.model.ResultModel;

@@ -1,4 +1,4 @@
-package mikugo.dev.search.data;
+package mikugo.dev.search.query;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.theme.ThemeDisplay;
