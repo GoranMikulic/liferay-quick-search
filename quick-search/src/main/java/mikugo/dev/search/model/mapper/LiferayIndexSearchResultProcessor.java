@@ -1,4 +1,4 @@
-package mikugo.dev.search.model;
+package mikugo.dev.search.model.mapper;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
@@ -35,12 +35,12 @@ import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 
 /**
- * Respresenting results from liferay search api, searching the index
+ * Respresenting results from liferay search api
  * 
  * @author mikugo
  *
  */
-public class IndexSearchResult {
+public class LiferayIndexSearchResultProcessor {
 
     private String className;
     private String entryTitle;
@@ -56,7 +56,7 @@ public class IndexSearchResult {
     private Summary summary;
     private ThemeDisplay themeDisplay;
 
-    public IndexSearchResult(Document document, ResourceRequest request, ResourceResponse response,
+    public LiferayIndexSearchResultProcessor(Document document, ResourceRequest request, ResourceResponse response,
 	    ThemeDisplay themeDisplay) throws Exception {
 	this.className = document.get(Field.ENTRY_CLASS_NAME);
 	this.returnToFullPageURL = (String) request.getAttribute("search.jsp-returnToFullPageURL");

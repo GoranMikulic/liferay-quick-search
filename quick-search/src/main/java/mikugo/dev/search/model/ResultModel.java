@@ -1,5 +1,7 @@
 package mikugo.dev.search.model;
 
+import mikugo.dev.search.model.mapper.LiferayIndexSearchResultProcessor;
+
 /**
  * Model class for search results
  * 
@@ -22,12 +24,12 @@ public class ResultModel {
 	this.metadata = metadata;
     }
 
-    public ResultModel(IndexSearchResult result) {
-	setTitle(result.getEntryTitle());
-	setSummary(result.getEntrySummary());
-	setDisplayUrl(result.getViewURL());
-	setAssetType(result.getUserFriendlyClassName());
-	setMetadata(result.getGroupName());
+    public ResultModel(LiferayIndexSearchResultProcessor resultMapper) {
+	setTitle(resultMapper.getEntryTitle());
+	setSummary(resultMapper.getEntrySummary());
+	setDisplayUrl(resultMapper.getViewURL());
+	setAssetType(resultMapper.getUserFriendlyClassName());
+	setMetadata(resultMapper.getGroupName());
     }
 
     public String getDisplayUrl() {

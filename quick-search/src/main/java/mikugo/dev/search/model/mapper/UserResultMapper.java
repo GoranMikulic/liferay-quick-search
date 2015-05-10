@@ -1,6 +1,8 @@
-package mikugo.dev.search.model;
+package mikugo.dev.search.model.mapper;
 
 import java.util.List;
+
+import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -17,12 +19,12 @@ import com.liferay.portal.service.UserLocalServiceUtil;
  * @author mikugo
  *
  */
-public class UserResultModel extends ResultModel {
+public class UserResultMapper extends ResultModel {
 
-    private static Log log = LogFactoryUtil.getLog(UserResultModel.class);
+    private static Log log = LogFactoryUtil.getLog(UserResultMapper.class);
     private User user;
 
-    public UserResultModel(IndexSearchResult result) {
+    public UserResultMapper(LiferayIndexSearchResultProcessor result) {
 	super(result);
 	try {
 	    this.user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
@@ -38,11 +40,11 @@ public class UserResultModel extends ResultModel {
     }
 
     /**
-     * Setting metadata for a {@link UserResultModel}
+     * Setting metadata for a {@link UserResultMapper}
      * 
      * @param result
      */
-    public void writeMetadata(IndexSearchResult result) {
+    public void writeMetadata(LiferayIndexSearchResultProcessor result) {
 	try {
 	    User user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
 	    StringBuilder sb = new StringBuilder();

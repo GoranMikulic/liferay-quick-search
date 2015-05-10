@@ -5,10 +5,10 @@ import java.util.List;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import mikugo.dev.search.data.ResultModelBuilder;
 import mikugo.dev.search.data.Search;
 import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.model.ResultModel;
+import mikugo.dev.search.model.mapper.IndexResultModelBuilder;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -129,6 +129,6 @@ public class IndexSearcherImpl implements Search {
     @Override
     public List<ResultModel> getResult() throws Exception {
 	List<Document> result = search(request, pattern, entryClassNames, maximumSearchResults);
-	return new ResultModelBuilder(Utils.getThemeDisplay(request), request, response).buildList(result);
+	return new IndexResultModelBuilder(Utils.getThemeDisplay(request), request, response).buildList(result);
     }
 }
