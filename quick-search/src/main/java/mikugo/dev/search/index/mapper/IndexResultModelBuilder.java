@@ -1,4 +1,4 @@
-package mikugo.dev.search.model.mapper;
+package mikugo.dev.search.index.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,9 @@ import java.util.List;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import mikugo.dev.search.model.ResultModel;
 import mikugo.dev.search.model.IndexResultModelFactory;
+import mikugo.dev.search.model.IndexResultResourcesModel;
+import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
@@ -60,8 +61,8 @@ public class IndexResultModelBuilder {
      * @throws Exception
      */
     private ResultModel buildModel(Document document) throws Exception {
-	return new IndexResultModelFactory().getModel(document.get(Field.ENTRY_CLASS_NAME), new LiferayIndexSearchResultProcessor(document,
-		request, response, themeDisplay));
+	return new IndexResultModelFactory(new IndexResultResourcesModel(document, request, response, themeDisplay))
+		.getModel(document.get(Field.ENTRY_CLASS_NAME));
     }
 
 }

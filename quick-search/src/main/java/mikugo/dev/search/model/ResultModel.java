@@ -1,7 +1,5 @@
 package mikugo.dev.search.model;
 
-import mikugo.dev.search.model.mapper.LiferayIndexSearchResultProcessor;
-
 /**
  * Model class for search results
  * 

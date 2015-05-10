@@ -1,5 +1,6 @@
-package mikugo.dev.search.model.mapper;
+package mikugo.dev.search.index.mapper;
 
+import mikugo.dev.search.model.IndexResultResourcesModel;
 import mikugo.dev.search.model.ResultModel;
 
 /**
@@ -10,8 +11,8 @@ import mikugo.dev.search.model.ResultModel;
  */
 public class MbMessageResultMapper extends IndexResultMapperImpl {
 
-    public MbMessageResultMapper(LiferayIndexSearchResultProcessor resultMapper) {
-	super(resultMapper);
+    public MbMessageResultMapper(IndexResultResourcesModel indexResultResourcesModel) throws Exception {
+	super(indexResultResourcesModel);
     }
 
     @Override

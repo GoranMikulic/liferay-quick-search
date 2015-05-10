@@ -1,4 +1,4 @@
-package mikugo.dev.search.model.mapper;
+package mikugo.dev.search.index.mapper;
 
 import mikugo.dev.search.model.ResultModel;
 

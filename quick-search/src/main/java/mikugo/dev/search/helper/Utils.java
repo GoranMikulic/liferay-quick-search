@@ -49,8 +49,8 @@ public class Utils {
 		filteredIndexTypes.add(dynQueryClassName);
 	    }
 	}
-
-	return (String[]) filteredIndexTypes.toArray();
+	
+	return filteredIndexTypes.toArray(new String[filteredIndexTypes.size()]);
     }
     
     /**

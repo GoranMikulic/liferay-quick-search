@@ -1,4 +1,4 @@
-package mikugo.dev.search.model.mapper;
+package mikugo.dev.search.helper;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
@@ -6,8 +6,6 @@ import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
-
-import mikugo.dev.search.helper.AssetTypes;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
@@ -40,7 +38,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
  * @author mikugo
  *
  */
-public class LiferayIndexSearchResultProcessor  {
+public class LiferayIndexSearchResultProcessor {
 
     private String className;
     private String entryTitle;
@@ -48,13 +46,21 @@ public class LiferayIndexSearchResultProcessor  {
     private String returnToFullPageURL;
     private PortletURL viewFullContentURL;
     private String viewURL;
+
     private String groupName;
     private AssetRenderer assetRenderer;
     private AssetEntry assetEntry;
     private AssetRendererFactory assetRendererFactory;
-    private Indexer indexer;
-    private Summary summary;
+    // private Indexer indexer;
+    // private Summary summary;
     private ThemeDisplay themeDisplay;
+
+    /**
+     * @return the themeDisplay
+     */
+    public ThemeDisplay getThemeDisplay() {
+	return themeDisplay;
+    }
 
     public LiferayIndexSearchResultProcessor(Document document, ResourceRequest request, ResourceResponse response,
 	    ThemeDisplay themeDisplay) throws Exception {
@@ -105,8 +111,8 @@ public class LiferayIndexSearchResultProcessor  {
 		viewURL = assetRenderer.getURLViewInContext((LiferayPortletRequest) request,
 			(LiferayPortletResponse) response, viewFullContentURLString);
 
-		groupName = GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getDescriptiveName(
-			themeDisplay.getLocale());
+		setGroupName(GroupLocalServiceUtil.getGroup(assetEntry.getGroupId()).getDescriptiveName(
+			themeDisplay.getLocale()));
 
 	    } else {
 		viewURL = viewFullContentURL.toString();
@@ -130,12 +136,12 @@ public class LiferayIndexSearchResultProcessor  {
 
 	    Summary summary = indexer.getSummary(document, themeDisplay.getLocale(), snippet, viewFullContentURL);
 	    if (summary != null) {
-		entryTitle = summary.getTitle();
-		entrySummary = summary.getContent();
+		this.entryTitle = summary.getTitle();
+		this.entrySummary = summary.getContent();
 	    }
 	} else if (assetRenderer != null) {
-	    entryTitle = assetRenderer.getTitle(themeDisplay.getLocale());
-	    entrySummary = assetRenderer.getSearchSummary(themeDisplay.getLocale());
+	    this.entryTitle = assetRenderer.getTitle(themeDisplay.getLocale());
+	    this.entrySummary = assetRenderer.getSearchSummary(themeDisplay.getLocale());
 	}
 
 	if ((assetRendererFactory == null)) {
@@ -214,45 +220,22 @@ public class LiferayIndexSearchResultProcessor  {
 	return groupName;
     }
 
-    public Indexer getIndexer() {
-	return indexer;
+    public void setGroupName(String groupName) {
+	this.groupName = groupName;
     }
 
-    public Summary getSummary() {
-	return summary;
-    }
-
+    /**
+     * @return the viewURL
+     */
     public String getViewURL() {
 	return viewURL;
     }
 
-    public String getClassName() {
-	return className;
-    }
-
-    public String getReturnToFullPageURL() {
-	return returnToFullPageURL;
-    }
-
-    public PortletURL getViewFullContentURL() {
-	return viewFullContentURL;
-    }
-
-    public AssetRenderer getAssetRenderer() {
-	return assetRenderer;
-    }
-
+    /**
+     * @return the assetEntry
+     */
     public AssetEntry getAssetEntry() {
 	return assetEntry;
     }
 
-    public AssetRendererFactory getAssetRendererFactory() {
-	return assetRendererFactory;
-    }
-
-    public ThemeDisplay getThemeDisplay() {
-	return themeDisplay;
-    }
-
-    
 }

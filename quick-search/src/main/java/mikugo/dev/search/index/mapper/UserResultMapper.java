@@ -1,7 +1,8 @@
-package mikugo.dev.search.model.mapper;
+package mikugo.dev.search.index.mapper;
 
 import java.util.List;
 
+import mikugo.dev.search.model.IndexResultResourcesModel;
 import mikugo.dev.search.model.ResultModel;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -24,8 +25,8 @@ public class UserResultMapper extends IndexResultMapperImpl {
     private static Log log = LogFactoryUtil.getLog(UserResultMapper.class);
     private User user;
 
-    public UserResultMapper(LiferayIndexSearchResultProcessor result) {
-	super(result);
+    public UserResultMapper(IndexResultResourcesModel indexResultResourcesModel) throws Exception {
+	super(indexResultResourcesModel);
     }
 
     @Override

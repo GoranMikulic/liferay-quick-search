@@ -7,8 +7,8 @@ import javax.portlet.ResourceResponse;
 
 import mikugo.dev.search.data.Search;
 import mikugo.dev.search.helper.Utils;
+import mikugo.dev.search.index.mapper.IndexResultModelBuilder;
 import mikugo.dev.search.model.ResultModel;
-import mikugo.dev.search.model.mapper.IndexResultModelBuilder;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
