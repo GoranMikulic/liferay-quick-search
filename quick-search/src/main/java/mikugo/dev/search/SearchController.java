@@ -87,14 +87,15 @@ public class SearchController extends MVCPortlet {
 	    throws JsonGenerationException, JsonMappingException, IOException {
 
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
-
+	
 	if (Utils.isFaceted(pattern)) {
-	    resultModelList = doFacetedSearch(request, response, pattern, resultModelList);
+
+	    resultModelList = doFacetedSearch(request, response, pattern);
+
 	} else {
 
-	    String[] filteredIndexTypes = Utils.filterIndexTypes(configuredAssetTypes);
+	    resultModelList = doIndexSearch(request, response, pattern, Utils.filterIndexTypes(configuredAssetTypes));
 
-	    resultModelList = doIndexSearch(request, response, pattern, filteredIndexTypes);
 	}
 
 	ObjectMapper mapper = new ObjectMapper();
@@ -135,13 +136,11 @@ public class SearchController extends MVCPortlet {
      * @param response
      * @param pattern
      * @param maximumSearchResults
-     * @param resultModelList
      * @param configuredAssetTypes
      * @return A list of {@link ResultModel}
      */
-    private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern,
-	    List<ResultModel> resultModelList) {
-
+    private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern) {
+	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 	// Parsing user input for search type and keyword
 	String searchType = pattern.substring(0, pattern.indexOf(":"));
 	pattern = pattern.substring(pattern.indexOf(":") + 1).trim();
@@ -185,19 +184,5 @@ public class SearchController extends MVCPortlet {
 	    log.error(e);
 	}
 	return resultModelList;
-    }
-
-    /**
-     * @return the configuredAssetTypes
-     */
-    public String[] getConfiguredAssetTypes() {
-	return this.configuredAssetTypes;
-    }
-
-    /**
-     * @return the maximumSearchResults
-     */
-    public int getMaximumSearchResults() {
-	return this.maximumSearchResults;
     }
 }
