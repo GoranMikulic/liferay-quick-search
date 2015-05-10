@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
@@ -46,10 +45,8 @@ public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Sea
 	for (Group group : result) {
 	    if (GroupPermissionUtil.contains(themeDisplay.getPermissionChecker(), group, "VIEW")
 		    && !group.getFriendlyURL().equals("/global") && group.isSite()) {
-		String url = getGroupUrl(group);
 
-		resultModel.add(new ResultModel(group.getDescriptiveName(), group.getDescription(), url, LanguageUtil
-			.get(themeDisplay.getLocale(), AssetTypes.SITE.getReadableName()), ""));
+		resultModel.add(new GroupMapper(themeDisplay).getResultModel(group));
 
 	    }
 	}
@@ -57,17 +54,4 @@ public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Sea
 	return resultModel;
     }
 
-    /**
-     * Returns landing page url of a {@link Group}
-     * 
-     * @param group
-     * @return Landing page url of a {@link Group}
-     */
-    private String getGroupUrl(Group group) {
-	if (group.isControlPanel() || !group.hasPublicLayouts()) {
-	    return "/group" + group.getFriendlyURL();
-	} else {
-	    return "/web" + group.getFriendlyURL();
-	}
-    }
 }

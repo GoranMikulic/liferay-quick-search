@@ -10,7 +10,6 @@ import mikugo.dev.search.model.ResultModel;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -48,14 +47,10 @@ public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Sear
 	    if (LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout.getPlid(), "VIEW")
 		    && layout.getGroup().isSite()) {
 
-		String layoutUrlPrefix = layout.isPrivateLayout() ? "/group" : "/web";
-
-		resultModel.add(new ResultModel(layout.getName(), layout.getDescription(), layoutUrlPrefix
-			+ layout.getGroup().getFriendlyURL() + layout.getFriendlyURL(), LanguageUtil.get(
-			themeDisplay.getLocale(), AssetTypes.LAYOUT.getReadableName()), layout.getGroup()
-			.getDescriptiveName()));
+		resultModel.add(new LayoutMapper(themeDisplay).getResultModel(layout));
 	    }
 	}
+
 	return resultModel;
     }
 
