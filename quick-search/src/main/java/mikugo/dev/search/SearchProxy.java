@@ -28,6 +28,19 @@ public class SearchProxy {
 
     private static Log log = LogFactoryUtil.getLog(SearchProxy.class);
 
+    private SearchSettings settings;
+    private ResourceRequest request;
+    private ResourceResponse response;
+    private String pattern;
+
+    public SearchProxy(SearchSettings settings, ResourceRequest request, ResourceResponse response, String pattern) {
+	super();
+	this.settings = settings;
+	this.request = request;
+	this.response = response;
+	this.pattern = pattern;
+    }
+
     /**
      * Recognizing pattern and initializing search
      * 
@@ -38,19 +51,18 @@ public class SearchProxy {
      * @param maximumSearchResults
      * @return A list of {@link ResultModel}
      */
-    public List<ResultModel> search(ResourceRequest request, ResourceResponse response, String pattern,
-	    String[] configuredAssetTypes, int maximumSearchResults) {
+    public List<ResultModel> search() {
 
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
 	if (Utils.isFaceted(pattern)) {
 
-	    resultModelList = doFacetedSearch(request, response, pattern, configuredAssetTypes, maximumSearchResults);
+	    resultModelList = doFacetedSearch(request, response, pattern);
 
 	} else {
 
-	    resultModelList = doIndexSearch(request, response, pattern, Utils.filterIndexTypes(configuredAssetTypes),
-		    maximumSearchResults);
+	    resultModelList = doIndexSearch(request, response, pattern,
+		    Utils.filterIndexTypes(settings.getConfiguredAssetTypes()));
 
 	}
 
@@ -69,8 +81,7 @@ public class SearchProxy {
      * @param configuredAssetTypes
      * @return A list of {@link ResultModel}
      */
-    private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern,
-	    String[] configuredAssetTypes, int maximumSearchResults) {
+    private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern) {
 
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 	// Parsing user input for search type and keyword
@@ -78,18 +89,18 @@ public class SearchProxy {
 	pattern = pattern.substring(pattern.indexOf(":") + 1).trim();
 
 	boolean searchTypeIsContainedInConfiguredTypes = ArrayUtil.contains(
-		AssetTypes.getReadableNames(configuredAssetTypes), searchType);
+		AssetTypes.getReadableNames(settings.getConfiguredAssetTypes()), searchType);
 
 	if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)
 		&& searchTypeIsContainedInConfiguredTypes) {
 
-	    resultModelList = doDynamicQuerySearch(request, pattern, searchType, maximumSearchResults);
+	    resultModelList = doDynamicQuerySearch(request, pattern, searchType);
 
 	} else if (ArrayUtil.contains(AssetTypes.getIndexSearchReadableNames(), searchType)
 		&& searchTypeIsContainedInConfiguredTypes) {
 
 	    resultModelList = doIndexSearch(request, response, pattern,
-		    new String[] { AssetTypes.getClassName(searchType) }, maximumSearchResults);
+		    new String[] { AssetTypes.getClassName(searchType) });
 	}
 
 	return resultModelList;
@@ -105,14 +116,13 @@ public class SearchProxy {
      * @param searchType
      * @return A list of {@link ResultModel}
      */
-    private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern, String searchType,
-	    int maximumSearchResults) {
+    private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern, String searchType) {
 
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
 	try {
-	    resultModelList = new DynamicQueryResultFactory(AssetTypes.getClassName(searchType), maximumSearchResults,
-		    Utils.getThemeDisplay(request), pattern).getResult();
+	    resultModelList = new DynamicQueryResultFactory(AssetTypes.getClassName(searchType),
+		    settings.getMaximumSearchResults(), Utils.getThemeDisplay(request), pattern).getResult();
 	} catch (SearchException e) {
 	    log.error(e);
 	} catch (Exception e) {
@@ -128,18 +138,17 @@ public class SearchProxy {
      * @param response
      * @param pattern
      * @param assetTypes
-     * @param maximumSearchResults
      * @param resultModelList
      * @return A list of {@link ResultModel}
      */
     private List<ResultModel> doIndexSearch(ResourceRequest request, ResourceResponse response, String pattern,
-	    String[] assetTypes, int maximumSearchResults) {
+	    String[] assetTypes) {
 
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
 	try {
-	    resultModelList = new IndexSearcherImpl(request, pattern, assetTypes, maximumSearchResults, response)
-		    .getResult();
+	    resultModelList = new IndexSearcherImpl(request, pattern, assetTypes, settings.getMaximumSearchResults(),
+		    response).getResult();
 	} catch (Exception e) {
 	    log.error(e);
 	}

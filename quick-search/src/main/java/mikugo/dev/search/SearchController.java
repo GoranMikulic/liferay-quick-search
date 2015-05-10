@@ -28,8 +28,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class SearchController extends MVCPortlet {
 
-    private int maximumSearchResults;
-    private String[] configuredAssetTypes;
+    private SearchSettings searchSettings;
 
     /**
      * Mapping requests
@@ -56,11 +55,11 @@ public class SearchController extends MVCPortlet {
 
 	PortletPreferences preferences = request.getPreferences();
 
-	this.maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
-		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
+	searchSettings.setMaximumSearchResults(GetterUtil.getInteger(preferences.getValue(
+		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5")));
 
-	this.configuredAssetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES,
-		AssetTypes.getAllClassNames());
+	searchSettings.setConfiguredAssetTypes(preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES,
+		AssetTypes.getAllClassNames()));
     }
 
     /**
@@ -77,8 +76,7 @@ public class SearchController extends MVCPortlet {
     public void serveResults(ResourceRequest request, ResourceResponse response, String pattern)
 	    throws JsonGenerationException, JsonMappingException, IOException {
 
-	List<ResultModel> resultModelList = new SearchProxy().search(request, response, pattern, configuredAssetTypes,
-		maximumSearchResults);
+	List<ResultModel> resultModelList = new SearchProxy(searchSettings, request, response, pattern).search();
 
 	ObjectMapper mapper = new ObjectMapper();
 	mapper.writeValue(response.getWriter(), resultModelList);
