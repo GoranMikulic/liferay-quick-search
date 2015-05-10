@@ -3,8 +3,6 @@ package mikugo.dev.search;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
@@ -39,6 +37,9 @@ public class SearchController extends MVCPortlet {
 
     private static Log log = LogFactoryUtil.getLog(SearchController.class);
 
+    private int maximumSearchResults;
+    private String[] configuredAssetTypes;
+
     /**
      * Mapping requests
      */
@@ -49,22 +50,26 @@ public class SearchController extends MVCPortlet {
 
 	if (resourceRequest.getParameter("action").equals("search")) {
 
+	    initSettings(resourceRequest);
 	    serveResults(resourceRequest, resourceResponse, resourceRequest.getParameter("pattern"));
 
 	}
     }
 
     /**
-     * Checks if the search keyword contains the pattern <type>:<keyword>
+     * Initializing portlet settings
      * 
-     * @param pattern
-     * @return
+     * @param request
      */
-    private boolean isFaceted(String pattern) {
-	// Regex should search for following pattern <type>:<keyword>
-	Pattern regex = Pattern.compile("([A-Z,a-z])+\\w:((\\s)*([A-Z,a-z])*)*");
-	Matcher matcher = regex.matcher(pattern);
-	return matcher.matches();
+    private void initSettings(ResourceRequest request) {
+
+	PortletPreferences preferences = request.getPreferences();
+
+	this.maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
+		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
+
+	this.configuredAssetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES,
+		AssetTypes.getAllClassNames());
     }
 
     /**
@@ -81,50 +86,20 @@ public class SearchController extends MVCPortlet {
     public void serveResults(ResourceRequest request, ResourceResponse response, String pattern)
 	    throws JsonGenerationException, JsonMappingException, IOException {
 
-	PortletPreferences preferences = request.getPreferences();
-
-	String[] configuredAssetTypes = preferences.getValues(Utils.CONFIGURATION_ASSET_TYPES,
-		AssetTypes.getAllClassNames());
-
-	int maximumSearchResults = GetterUtil.getInteger(preferences.getValue(
-		Utils.CONFIGURATION_MAXIMUM_SEARCH_RESULTS, "5"));
-
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
-	if (isFaceted(pattern)) {
-	    resultModelList = doFacetedSearch(request, response, pattern, maximumSearchResults, resultModelList,
-		    configuredAssetTypes);
+	if (Utils.isFaceted(pattern)) {
+	    resultModelList = doFacetedSearch(request, response, pattern, resultModelList);
 	} else {
 
-	    String[] filteredIndexTypes = filterIndexTypes(configuredAssetTypes);
+	    String[] filteredIndexTypes = Utils.filterIndexTypes(configuredAssetTypes);
 
-	    resultModelList = doIndexSearch(request, response, pattern, filteredIndexTypes, maximumSearchResults);
+	    resultModelList = doIndexSearch(request, response, pattern, filteredIndexTypes);
 	}
 
 	ObjectMapper mapper = new ObjectMapper();
 	mapper.writeValue(response.getWriter(), resultModelList);
 	response.getWriter().flush();
-    }
-
-    /**
-     * Removing dynamic query class names from the configured asset types to get
-     * the configured types for index search
-     * 
-     * @param assetTypes
-     * 
-     * @return
-     */
-    private String[] filterIndexTypes(String[] assetTypes) {
-
-	List<String> filteredIndexTypes = new ArrayList<String>();
-
-	for (String dynQueryClassName : AssetTypes.getIndexSearchClassNames()) {
-	    if (ArrayUtil.contains(assetTypes, dynQueryClassName)) {
-		filteredIndexTypes.add(dynQueryClassName);
-	    }
-	}
-
-	return (String[]) filteredIndexTypes.toArray();
     }
 
     /**
@@ -139,7 +114,7 @@ public class SearchController extends MVCPortlet {
      * @return
      */
     private List<ResultModel> doIndexSearch(ResourceRequest request, ResourceResponse response, String pattern,
-	    String[] assetTypes, int maximumSearchResults) {
+	    String[] assetTypes) {
 
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
@@ -165,22 +140,25 @@ public class SearchController extends MVCPortlet {
      * @return A list of {@link ResultModel}
      */
     private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern,
-	    int maximumSearchResults, List<ResultModel> resultModelList, String[] configuredAssetTypes) {
+	    List<ResultModel> resultModelList) {
 
 	// Parsing user input for search type and keyword
 	String searchType = pattern.substring(0, pattern.indexOf(":"));
 	pattern = pattern.substring(pattern.indexOf(":") + 1).trim();
 
-	if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)
-		&& ArrayUtil.contains(AssetTypes.getReadableNames(configuredAssetTypes), searchType)) {
+	boolean searchTypeIsContainedInConfiguredTypes = ArrayUtil.contains(
+		AssetTypes.getReadableNames(configuredAssetTypes), searchType);
 
-	    resultModelList = doDynamicQuerySearch(request, pattern, maximumSearchResults, resultModelList, searchType);
+	if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)
+		&& searchTypeIsContainedInConfiguredTypes) {
+
+	    resultModelList = doDynamicQuerySearch(request, pattern, resultModelList, searchType);
 
 	} else if (ArrayUtil.contains(AssetTypes.getIndexSearchReadableNames(), searchType)
-		&& ArrayUtil.contains(AssetTypes.getReadableNames(configuredAssetTypes), searchType)) {
+		&& searchTypeIsContainedInConfiguredTypes) {
 
 	    resultModelList = doIndexSearch(request, response, pattern,
-		    new String[] { AssetTypes.getClassName(searchType) }, maximumSearchResults);
+		    new String[] { AssetTypes.getClassName(searchType) });
 	}
 
 	return resultModelList;
@@ -196,7 +174,7 @@ public class SearchController extends MVCPortlet {
      * @param searchType
      * @return A list of {@link ResultModel}
      */
-    private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern, int maximumSearchResults,
+    private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern,
 	    List<ResultModel> resultModelList, String searchType) {
 	try {
 	    resultModelList = new DynamicQueryResult(AssetTypes.getClassName(searchType), maximumSearchResults,
@@ -207,5 +185,19 @@ public class SearchController extends MVCPortlet {
 	    log.error(e);
 	}
 	return resultModelList;
+    }
+
+    /**
+     * @return the configuredAssetTypes
+     */
+    public String[] getConfiguredAssetTypes() {
+	return this.configuredAssetTypes;
+    }
+
+    /**
+     * @return the maximumSearchResults
+     */
+    public int getMaximumSearchResults() {
+	return this.maximumSearchResults;
     }
 }
