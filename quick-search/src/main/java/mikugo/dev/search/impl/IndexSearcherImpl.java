@@ -1,10 +1,12 @@
-package mikugo.dev.search.data;
+package mikugo.dev.search.impl;
 
 import java.util.List;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import mikugo.dev.search.data.ResultModelBuilder;
+import mikugo.dev.search.data.Search;
 import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.model.ResultModel;
 

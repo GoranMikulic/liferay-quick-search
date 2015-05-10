@@ -27,6 +27,7 @@ public class UserResultModel extends ResultModel {
 	try {
 	    this.user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
 	    setDisplayUrl(user.getDisplayURL(result.getThemeDisplay()));
+	    writeMetadata(result);
 	} catch (PortalException e) {
 	    setDisplayUrl("mailto:" + user.getDisplayEmailAddress());
 	    log.error(e);
@@ -36,7 +37,11 @@ public class UserResultModel extends ResultModel {
 	}
     }
 
-    @Override
+    /**
+     * Setting metadata for a {@link UserResultModel}
+     * 
+     * @param result
+     */
     public void writeMetadata(IndexSearchResult result) {
 	try {
 	    User user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());

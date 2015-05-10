@@ -41,6 +41,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
  *
  */
 public class IndexSearchResult {
+
     private String className;
     private String entryTitle;
     private String entrySummary;
@@ -192,15 +193,13 @@ public class IndexSearchResult {
 	return viewURL;
     }
 
-    // TODO: Refactoring! Use enum
+    /**
+     * Returns localized asset name
+     * 
+     * @return localized asset name
+     */
     public String getUserFriendlyClassName() {
-	for (AssetTypes type : AssetTypes.values()) {
-	    if (type.getClassName().equals(className)) {
-		return LanguageUtil.get(themeDisplay.getLocale(), type.getReadableName());
-	    }
-	}
-
-	return "";
+	return LanguageUtil.get(themeDisplay.getLocale(), AssetTypes.getReadableName(this.className));
     }
 
     public String getEntryTitle() {

@@ -11,10 +11,10 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import mikugo.dev.search.data.DynamicQueryResultBuilder;
-import mikugo.dev.search.data.IndexSearcherImpl;
+import mikugo.dev.search.data.DynamicQueryResult;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.helper.Utils;
+import mikugo.dev.search.impl.IndexSearcherImpl;
 import mikugo.dev.search.model.ResultModel;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -36,6 +36,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  *
  */
 public class SearchController extends MVCPortlet {
+
     private static Log log = LogFactoryUtil.getLog(SearchController.class);
 
     /**
@@ -95,26 +96,65 @@ public class SearchController extends MVCPortlet {
 		    configuredAssetTypes);
 	} else {
 
-	    for (String dynQueryClassName : AssetTypes.getDynamicQueryClassNames()) {
-		ArrayUtil.remove(configuredAssetTypes, dynQueryClassName);
-	    }
+	    String[] filteredIndexTypes = filterIndexTypes(configuredAssetTypes);
 
-	    try {
-		resultModelList = new IndexSearcherImpl(request, pattern, configuredAssetTypes, maximumSearchResults,
-			response).getResult();
-	    } catch (Exception e) {
-		log.error(e);
-	    }
-
+	    resultModelList = doIndexSearch(request, response, pattern, filteredIndexTypes, maximumSearchResults);
 	}
 
 	ObjectMapper mapper = new ObjectMapper();
 	mapper.writeValue(response.getWriter(), resultModelList);
 	response.getWriter().flush();
     }
-    
+
     /**
-     * This method is processing the search, delegates the different search types and returns a list of {@link ResultModel}
+     * Removing dynamic query class names from the configured asset types to get
+     * the configured types for index search
+     * 
+     * @param assetTypes
+     * 
+     * @return
+     */
+    private String[] filterIndexTypes(String[] assetTypes) {
+
+	List<String> filteredIndexTypes = new ArrayList<String>();
+
+	for (String dynQueryClassName : AssetTypes.getIndexSearchClassNames()) {
+	    if (ArrayUtil.contains(assetTypes, dynQueryClassName)) {
+		filteredIndexTypes.add(dynQueryClassName);
+	    }
+	}
+
+	return (String[]) filteredIndexTypes.toArray();
+    }
+
+    /**
+     * Initializing Index Search without type facets
+     * 
+     * @param request
+     * @param response
+     * @param pattern
+     * @param assetTypes
+     * @param maximumSearchResults
+     * @param resultModelList
+     * @return
+     */
+    private List<ResultModel> doIndexSearch(ResourceRequest request, ResourceResponse response, String pattern,
+	    String[] assetTypes, int maximumSearchResults) {
+
+	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
+
+	try {
+	    resultModelList = new IndexSearcherImpl(request, pattern, assetTypes, maximumSearchResults, response)
+		    .getResult();
+	} catch (Exception e) {
+	    log.error(e);
+	}
+	return resultModelList;
+    }
+
+    /**
+     * This method is processing the search, delegates the different search
+     * types and returns a list of {@link ResultModel}
      * 
      * @param request
      * @param response
@@ -127,30 +167,44 @@ public class SearchController extends MVCPortlet {
     private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern,
 	    int maximumSearchResults, List<ResultModel> resultModelList, String[] configuredAssetTypes) {
 
+	// Parsing user input for search type and keyword
 	String searchType = pattern.substring(0, pattern.indexOf(":"));
 	pattern = pattern.substring(pattern.indexOf(":") + 1).trim();
 
 	if (ArrayUtil.contains(AssetTypes.getDynamicQueryReadableNames(), searchType)
 		&& ArrayUtil.contains(AssetTypes.getReadableNames(configuredAssetTypes), searchType)) {
 
-	    try {
-		resultModelList = new DynamicQueryResultBuilder(AssetTypes.getClassName(searchType),
-			maximumSearchResults, Utils.getThemeDisplay(request), pattern).getResult();
-	    } catch (SearchException e) {
-		log.error(e);
-	    } catch (Exception e) {
-		log.error(e);
-	    }
+	    resultModelList = doDynamicQuerySearch(request, pattern, maximumSearchResults, resultModelList, searchType);
+
 	} else if (ArrayUtil.contains(AssetTypes.getIndexSearchReadableNames(), searchType)
 		&& ArrayUtil.contains(AssetTypes.getReadableNames(configuredAssetTypes), searchType)) {
 
-	    try {
-		resultModelList = new IndexSearcherImpl(request, pattern,
-			new String[] { AssetTypes.getClassName(searchType) }, maximumSearchResults, response)
-			.getResult();
-	    } catch (Exception e) {
-		log.error(e);
-	    }
+	    resultModelList = doIndexSearch(request, response, pattern,
+		    new String[] { AssetTypes.getClassName(searchType) }, maximumSearchResults);
+	}
+
+	return resultModelList;
+    }
+
+    /**
+     * Processing a Dynamic Query Search
+     * 
+     * @param request
+     * @param pattern
+     * @param maximumSearchResults
+     * @param resultModelList
+     * @param searchType
+     * @return A list of {@link ResultModel}
+     */
+    private List<ResultModel> doDynamicQuerySearch(ResourceRequest request, String pattern, int maximumSearchResults,
+	    List<ResultModel> resultModelList, String searchType) {
+	try {
+	    resultModelList = new DynamicQueryResult(AssetTypes.getClassName(searchType), maximumSearchResults,
+		    Utils.getThemeDisplay(request), pattern).getResult();
+	} catch (SearchException e) {
+	    log.error(e);
+	} catch (Exception e) {
+	    log.error(e);
 	}
 	return resultModelList;
     }

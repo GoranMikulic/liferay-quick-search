@@ -1,6 +1,5 @@
 package mikugo.dev.search.model;
 
-
 /**
  * Model class for search results
  * 
@@ -24,15 +23,10 @@ public class ResultModel {
     }
 
     public ResultModel(IndexSearchResult result) {
-
 	setTitle(result.getEntryTitle());
 	setSummary(result.getEntrySummary());
 	setDisplayUrl(result.getViewURL());
 	setAssetType(result.getUserFriendlyClassName());
-	writeMetadata(result);
-    }
-
-    public void writeMetadata(IndexSearchResult result) {
 	setMetadata(result.getGroupName());
     }
 

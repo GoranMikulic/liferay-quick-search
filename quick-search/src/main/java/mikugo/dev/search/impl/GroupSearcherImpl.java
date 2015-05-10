@@ -1,8 +1,10 @@
-package mikugo.dev.search.data;
+package mikugo.dev.search.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import mikugo.dev.search.data.AbstractDynamicQuerySearch;
+import mikugo.dev.search.data.Search;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.model.ResultModel;
 
@@ -57,7 +59,7 @@ public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Sea
     }
 
     /**
-     * Retruns landing page url of a {@link Group}
+     * Returns landing page url of a {@link Group}
      * 
      * @param group
      * @return Landing page url of a {@link Group}
