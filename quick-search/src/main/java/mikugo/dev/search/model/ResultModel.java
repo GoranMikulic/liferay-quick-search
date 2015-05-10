@@ -24,14 +24,6 @@ public class ResultModel {
 	this.metadata = metadata;
     }
 
-    public ResultModel(LiferayIndexSearchResultProcessor resultMapper) {
-	setTitle(resultMapper.getEntryTitle());
-	setSummary(resultMapper.getEntrySummary());
-	setDisplayUrl(resultMapper.getViewURL());
-	setAssetType(resultMapper.getUserFriendlyClassName());
-	setMetadata(resultMapper.getGroupName());
-    }
-
     public String getDisplayUrl() {
 	return displayUrl;
     }

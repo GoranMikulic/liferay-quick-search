@@ -40,7 +40,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
  * @author mikugo
  *
  */
-public class LiferayIndexSearchResultProcessor {
+public class LiferayIndexSearchResultProcessor  {
 
     private String className;
     private String entryTitle;
@@ -253,4 +253,6 @@ public class LiferayIndexSearchResultProcessor {
     public ThemeDisplay getThemeDisplay() {
 	return themeDisplay;
     }
+
+    
 }

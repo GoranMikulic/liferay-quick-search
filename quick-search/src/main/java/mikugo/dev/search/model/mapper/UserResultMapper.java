@@ -19,24 +19,32 @@ import com.liferay.portal.service.UserLocalServiceUtil;
  * @author mikugo
  *
  */
-public class UserResultMapper extends ResultModel {
+public class UserResultMapper extends IndexResultMapperImpl {
 
     private static Log log = LogFactoryUtil.getLog(UserResultMapper.class);
     private User user;
 
     public UserResultMapper(LiferayIndexSearchResultProcessor result) {
 	super(result);
+    }
+
+    @Override
+    public ResultModel getResultModel() {
+	ResultModel resultModel = super.getResultModel();
+
 	try {
-	    this.user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
-	    setDisplayUrl(user.getDisplayURL(result.getThemeDisplay()));
-	    writeMetadata(result);
+	    this.user = UserLocalServiceUtil.getUser(processor.getAssetEntry().getClassPK());
+	    resultModel.setDisplayUrl(user.getDisplayURL(processor.getThemeDisplay()));
+	    writeMetadata(resultModel);
 	} catch (PortalException e) {
-	    setDisplayUrl("mailto:" + user.getDisplayEmailAddress());
+	    resultModel.setDisplayUrl("mailto:" + user.getDisplayEmailAddress());
 	    log.error(e);
 	} catch (SystemException e) {
-	    setDisplayUrl("mailto:" + user.getDisplayEmailAddress());
+	    resultModel.setDisplayUrl("mailto:" + user.getDisplayEmailAddress());
 	    log.error(e);
 	}
+
+	return resultModel;
     }
 
     /**
@@ -44,27 +52,28 @@ public class UserResultMapper extends ResultModel {
      * 
      * @param result
      */
-    public void writeMetadata(LiferayIndexSearchResultProcessor result) {
+    public void writeMetadata(ResultModel resultModel) {
 	try {
-	    User user = UserLocalServiceUtil.getUser(result.getAssetEntry().getClassPK());
+	    User user = UserLocalServiceUtil.getUser(processor.getAssetEntry().getClassPK());
 	    StringBuilder sb = new StringBuilder();
 	    sb.append(user.getEmailAddress());
 	    List<Phone> phones = user.getPhones();
 
 	    if (!phones.isEmpty()) {
-		sb.append(LanguageUtil.get(result.getThemeDisplay().getLocale(), "phone"));
+		sb.append(LanguageUtil.get(processor.getThemeDisplay().getLocale(), "phone"));
 		sb.append(" ");
 
 		for (Phone phone : phones) {
 		    sb.append(phone);
 		}
 	    }
-	    setMetadata(sb.toString());
+	    resultModel.setMetadata(sb.toString());
 	} catch (PortalException e) {
-	    setMetadata("");
+	    resultModel.setMetadata("");
 	    log.error(e);
 	} catch (SystemException e) {
 	    log.error(e);
 	}
     }
+
 }

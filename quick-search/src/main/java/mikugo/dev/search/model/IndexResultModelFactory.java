@@ -1,6 +1,7 @@
 package mikugo.dev.search.model;
 
 import mikugo.dev.search.helper.AssetTypes;
+import mikugo.dev.search.model.mapper.IndexResultMapperImpl;
 import mikugo.dev.search.model.mapper.LiferayIndexSearchResultProcessor;
 import mikugo.dev.search.model.mapper.MbMessageResultMapper;
 import mikugo.dev.search.model.mapper.UserResultMapper;
@@ -23,11 +24,17 @@ public class IndexResultModelFactory {
     public ResultModel getModel(String entryType, LiferayIndexSearchResultProcessor liferayResult) {
 
 	if (AssetTypes.USER.getClassName().equals(entryType)) {
-	    return new UserResultMapper(liferayResult);
+
+	    return new UserResultMapper(liferayResult).getResultModel();
+
 	} else if (AssetTypes.MBM_MESSAGE.getClassName().equals(entryType)) {
-	    return new MbMessageResultMapper(liferayResult);
+
+	    return new MbMessageResultMapper(liferayResult).getResultModel();
+
 	} else {
-	    return new ResultModel(liferayResult);
+
+	    return new IndexResultMapperImpl(liferayResult).getResultModel();
+
 	}
     }
 }
