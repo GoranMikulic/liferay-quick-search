@@ -28,7 +28,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  */
 public class SearchController extends MVCPortlet {
 
-    private SearchSettings searchSettings;
+    private SearchSettings searchSettings = new SearchSettings();
 
     /**
      * Mapping requests

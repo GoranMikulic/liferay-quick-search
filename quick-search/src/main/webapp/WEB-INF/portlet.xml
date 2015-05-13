@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
 	version="2.0">
 	<portlet>
-		<portlet-name>quick-search</portlet-name>
+		<portlet-name>quicksearch</portlet-name>
 		<display-name>Quick Search</display-name>
 		<portlet-class>mikugo.dev.search.SearchController</portlet-class>
 		<init-param>
@@ -20,11 +20,11 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
-		<resource-bundle>content.Language</resource-bundle>
+		<resource-bundle>Language</resource-bundle>
 		<portlet-info>
-			<title>quick-search</title>
-			<short-title>quick-search</short-title>
-			<keywords>quick-search</keywords>
+			<title>quicksearch</title>
+			<short-title>quicksearch</short-title>
+			<keywords>quicksearch</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>

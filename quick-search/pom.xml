@@ -6,7 +6,7 @@
 	<groupId>com.mikugo.plugins</groupId>
 	<artifactId>quicksearch-portlet</artifactId>
 	<packaging>war</packaging>
-	<name>quick-search Portlet</name>
+	<name>quicksearch Portlet</name>
 	<version>1.0.0.0</version>
 	<build>
 		<plugins>
