@@ -22,9 +22,9 @@
 		</supports>
 		<resource-bundle>Language</resource-bundle>
 		<portlet-info>
-			<title>quicksearch</title>
-			<short-title>quicksearch</short-title>
-			<keywords>quicksearch</keywords>
+			<title>Quick Search</title>
+			<short-title>qs</short-title>
+			<keywords>quick,search</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
