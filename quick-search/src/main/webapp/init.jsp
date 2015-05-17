@@ -14,4 +14,7 @@
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="com.liferay.portal.kernel.util.ArrayUtil"%>
+<%@ page import="java.util.List"%>
+<%@ page import="com.liferay.portal.kernel.util.KeyValuePair"%>
+<%@ page import="java.util.ArrayList"%>
 <portlet:defineObjects />
