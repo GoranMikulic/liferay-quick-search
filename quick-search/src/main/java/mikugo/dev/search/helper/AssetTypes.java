@@ -4,28 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Enumartaion class for the available search asset types
+ * Enumeration class for the available search asset types
  * 
  * @author mikugo
  *
  */
 public enum AssetTypes {
 
-    USER("user", "com.liferay.portal.model.User"), FILEENTRY("file",
-	    "com.liferay.portlet.documentlibrary.model.DLFileEntry"), JOURNAL_ARTICLE("article",
-	    "com.liferay.portlet.journal.model.JournalArticle"), BOOKMARKS_ENTRY("bookmark",
-	    "com.liferay.portlet.bookmarks.model.BookmarksEntry"), BLOGS_ENTRY("blog",
-	    "com.liferay.portlet.blogs.model.BlogsEntry"), MBM_MESSAGE("mbmessage",
-	    "com.liferay.portlet.messageboards.model.MBMessage"), WIKI_PAGE("wiki-page",
-	    "com.liferay.portlet.wiki.model.WikiPage"), SITE("site", "com.liferay.portal.model.Group"), LAYOUT("page",
-	    "com.liferay.portal.model.Layout");
+    /** index search types **/
+    USER("user", "com.liferay.portal.model.User", true), // <br/>
+    FILEENTRY("file", "com.liferay.portlet.documentlibrary.model.DLFileEntry", true), // <br/>
+    JOURNAL_ARTICLE("article", "com.liferay.portlet.journal.model.JournalArticle", true), // <br/>
+    BOOKMARKS_ENTRY("bookmark", "com.liferay.portlet.bookmarks.model.BookmarksEntry", true), // <br/>
+    BLOGS_ENTRY("blog", "com.liferay.portlet.blogs.model.BlogsEntry", true), // <br/>
+    MBM_MESSAGE("mbmessage", "com.liferay.portlet.messageboards.model.MBMessage", true), // <br/>
+    WIKI_PAGE("wiki-page", "com.liferay.portlet.wiki.model.WikiPage", true), // <br/>
+
+    /** dynamic query types **/
+    SITE("site", "com.liferay.portal.model.Group", false), // <br/>
+    LAYOUT("page", "com.liferay.portal.model.Layout", false);
 
     private String readableName;
     private String className;
+    boolean isIndexSearch;
 
-    private AssetTypes(String readableName, String className) {
+    private AssetTypes(String readableName, String className, boolean isIndexSearch) {
 	this.readableName = readableName;
 	this.className = className;
+	this.isIndexSearch = isIndexSearch;
     }
 
     public String getReadableName() {
@@ -36,6 +42,13 @@ public enum AssetTypes {
 	return className;
     }
 
+    /**
+     * Returns class name of the readable name
+     * 
+     * @param readableName
+     *            - The readable name of the searched class name
+     * @return class name of the class name
+     */
     public static String getClassName(String readableName) {
 
 	for (AssetTypes type : AssetTypes.values()) {
@@ -47,6 +60,13 @@ public enum AssetTypes {
 	return null;
     }
 
+    /**
+     * Returns readable name of the className
+     * 
+     * @param className
+     *            - The className of the searched readableName
+     * @return readable name of the className
+     */
     public static String getReadableName(String className) {
 	for (AssetTypes type : AssetTypes.values()) {
 	    if (className.equals(type.className)) {
@@ -57,6 +77,13 @@ public enum AssetTypes {
 	return null;
     }
 
+    /**
+     * Returns {@link String[]} of type names of the given classNames
+     * 
+     * @param classNames
+     *            - ClassNames the readable names are searched for
+     * @return {@link String[]} of type names of the given classNames
+     */
     public static String[] getReadableNames(String[] classNames) {
 	String[] readableNames = new String[classNames.length];
 
@@ -67,6 +94,11 @@ public enum AssetTypes {
 	return readableNames;
     }
 
+    /**
+     * Returns all class names
+     * 
+     * @return all class names
+     */
     public static String[] getAllClassNames() {
 
 	List<String> types = new ArrayList<String>();
@@ -76,22 +108,74 @@ public enum AssetTypes {
 	return types.toArray(new String[types.size()]);
     }
 
+    /**
+     * Returns class names of index search types
+     * 
+     * @return class names of index search types
+     */
     public static String[] getIndexSearchClassNames() {
-	return new String[] { USER.className, FILEENTRY.className, JOURNAL_ARTICLE.className,
-		BOOKMARKS_ENTRY.className, BLOGS_ENTRY.className, MBM_MESSAGE.className, WIKI_PAGE.className };
+
+	List<String> indexClassNames = new ArrayList<String>();
+
+	for (AssetTypes type : values()) {
+	    if (type.isIndexSearch) {
+		indexClassNames.add(type.className);
+	    }
+	}
+
+	return indexClassNames.toArray(new String[indexClassNames.size()]);
     }
 
+    /**
+     * Returns names of index search types
+     * 
+     * @return names of index search types
+     */
     public static String[] getIndexSearchReadableNames() {
-	return new String[] { USER.readableName, FILEENTRY.readableName, JOURNAL_ARTICLE.readableName,
-		BOOKMARKS_ENTRY.readableName, BLOGS_ENTRY.readableName, MBM_MESSAGE.readableName,
-		WIKI_PAGE.readableName };
+
+	List<String> indexReadableNames = new ArrayList<String>();
+
+	for (AssetTypes type : values()) {
+	    if (type.isIndexSearch) {
+		indexReadableNames.add(type.readableName);
+	    }
+	}
+
+	return indexReadableNames.toArray(new String[indexReadableNames.size()]);
     }
 
+    /**
+     * Returns class names of dynamic query types
+     * 
+     * @return class names of dynamic query types
+     */
     public static String[] getDynamicQueryClassNames() {
-	return new String[] { SITE.className, LAYOUT.className };
+
+	List<String> dynamicQueryClassNames = new ArrayList<String>();
+
+	for (AssetTypes type : values()) {
+	    if (!type.isIndexSearch) {
+		dynamicQueryClassNames.add(type.className);
+	    }
+	}
+
+	return dynamicQueryClassNames.toArray(new String[dynamicQueryClassNames.size()]);
     }
 
+    /**
+     * Returns all names of query types
+     * 
+     * @return Names of query types
+     */
     public static String[] getDynamicQueryReadableNames() {
-	return new String[] { SITE.readableName, LAYOUT.readableName };
+	List<String> dynamicQueryReadableNames = new ArrayList<String>();
+
+	for (AssetTypes type : values()) {
+	    if (!type.isIndexSearch) {
+		dynamicQueryReadableNames.add(type.readableName);
+	    }
+	}
+
+	return dynamicQueryReadableNames.toArray(new String[dynamicQueryReadableNames.size()]);
     }
 }
