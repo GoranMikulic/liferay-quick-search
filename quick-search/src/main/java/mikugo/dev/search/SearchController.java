@@ -77,7 +77,8 @@ public class SearchController extends MVCPortlet {
 	    throws JsonGenerationException, JsonMappingException, IOException {
 
 	List<ResultModel> resultModelList = new SearchProxy(searchSettings, request, response, pattern).search();
-
+	
+	//serving java result for js in UI
 	ObjectMapper mapper = new ObjectMapper();
 	mapper.writeValue(response.getWriter(), resultModelList);
 	response.getWriter().flush();
