@@ -6,7 +6,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 /**
  * Abstract class for a search via Liferay {@link DynamicQuery} API
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public abstract class AbstractDynamicQuerySearch {

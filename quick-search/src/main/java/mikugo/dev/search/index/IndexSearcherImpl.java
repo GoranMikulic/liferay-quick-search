@@ -26,7 +26,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 /**
  * Search Implementation for a Liferay index search
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class IndexSearcherImpl implements Search {

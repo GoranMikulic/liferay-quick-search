@@ -19,7 +19,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 /**
  * Implementation for a {@link Layout} search
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class LayoutSearchImpl extends AbstractDynamicQuerySearch implements Search {

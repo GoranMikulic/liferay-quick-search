@@ -10,7 +10,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 /**
  * Proxy class which delegates search for different dynamic query search types
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class DynamicQueryResultFactory {

@@ -16,7 +16,7 @@ import com.liferay.portal.theme.ThemeDisplay;
  * This class is responsible for mapping of lucene search results
  * {@link Document} to {@link ResultModel} used for representation in GUI
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class IndexResultModelBuilder {

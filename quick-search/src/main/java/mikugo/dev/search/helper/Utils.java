@@ -14,7 +14,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 /**
  * Util Class for quick search project
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class Utils {

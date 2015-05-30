@@ -23,7 +23,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * 
  * Portlet-Controller-Class, handles the requests from the UI
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class SearchController extends MVCPortlet {

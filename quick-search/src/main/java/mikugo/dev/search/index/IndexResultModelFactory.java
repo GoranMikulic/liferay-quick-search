@@ -9,7 +9,7 @@ import mikugo.dev.search.model.ResultModel;
 /**
  * Factory class for {@link ResultModel} Types
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class IndexResultModelFactory {

@@ -6,7 +6,7 @@ import mikugo.dev.search.model.ResultModel;
 /**
  * Model class for message board results
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class MbMessageResultMapper extends IndexResultMapperImpl {

@@ -35,7 +35,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 /**
  * Respresenting results from liferay search api
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class LiferayIndexSearchResultProcessor {

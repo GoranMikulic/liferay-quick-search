@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
  * This class recognizes the search type by pattern and delegates the search
  * request to the different search implementations
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class SearchProxy {

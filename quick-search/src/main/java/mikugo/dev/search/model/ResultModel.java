@@ -3,7 +3,7 @@ package mikugo.dev.search.model;
 /**
  * Model class for search results
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class ResultModel {

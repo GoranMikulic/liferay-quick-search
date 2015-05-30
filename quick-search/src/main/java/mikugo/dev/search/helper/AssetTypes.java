@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Enumeration class for the available search asset types
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public enum AssetTypes {

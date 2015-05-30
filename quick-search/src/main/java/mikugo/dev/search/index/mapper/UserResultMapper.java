@@ -17,7 +17,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 /**
  * This class represents a result model for Users
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class UserResultMapper extends IndexResultMapperImpl {

@@ -9,7 +9,7 @@ import mikugo.dev.search.model.ResultModel;
 /**
  * Interface for search implementations
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public interface Search {

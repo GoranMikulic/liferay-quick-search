@@ -20,7 +20,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 /**
  * Implementation for a {@link Group} search
  * 
- * @author mikugo
+ * @author Goran Mikulic
  *
  */
 public class GroupSearcherImpl extends AbstractDynamicQuerySearch implements Search {
