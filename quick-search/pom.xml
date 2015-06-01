@@ -7,7 +7,7 @@
 	<artifactId>quicksearch-portlet</artifactId>
 	<packaging>war</packaging>
 	<name>quicksearch Portlet</name>
-	<version>1.0.0.0</version>
+	<version>1.1.0.0</version>
 	<build>
 		<plugins>
 			<plugin>
@@ -116,4 +116,8 @@
 			</properties>
 		</profile>
 	</profiles>
+	<description>1.1:
+- UI improvements
+- Improved configuration view
+</description>
 </project>
