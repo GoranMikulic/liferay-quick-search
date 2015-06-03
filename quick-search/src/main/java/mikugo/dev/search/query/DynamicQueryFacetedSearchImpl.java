@@ -2,6 +2,7 @@ package mikugo.dev.search.query;
 
 import java.util.List;
 
+import mikugo.dev.search.data.Search;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.model.ResultModel;
 
@@ -13,18 +14,18 @@ import com.liferay.portal.theme.ThemeDisplay;
  * @author Goran Mikulic
  *
  */
-public class DynamicQueryResultFactory {
+public class DynamicQueryFacetedSearchImpl implements Search {
 
     private String className;
     private int maxSearchResults;
     private ThemeDisplay themeDisplay;
-
+    
     private String pattern;
 
     /**
      * Constructor
      */
-    public DynamicQueryResultFactory(String className, int maxSearchResults, ThemeDisplay themeDisplay, String pattern)
+    public DynamicQueryFacetedSearchImpl(String className, int maxSearchResults, ThemeDisplay themeDisplay, String pattern)
 	    throws Exception {
 
 	this.className = className;
@@ -34,11 +35,13 @@ public class DynamicQueryResultFactory {
     }
 
     /**
-     * Returs a list of {@link ResultModel} from the asset types with the given className
+     * Returs a list of {@link ResultModel} from the asset types with the given
+     * className
      * 
      * @return A list of {@link ResultModel}
      * @throws Exception
      */
+    @Override
     public List<ResultModel> getResult() throws Exception {
 
 	if (className.equals(AssetTypes.SITE.getClassName())) {

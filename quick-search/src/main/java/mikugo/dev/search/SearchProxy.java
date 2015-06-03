@@ -6,11 +6,12 @@ import java.util.List;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import mikugo.dev.search.combined.CombinedSearchImpl;
 import mikugo.dev.search.helper.AssetTypes;
 import mikugo.dev.search.helper.Utils;
 import mikugo.dev.search.index.IndexSearcherImpl;
 import mikugo.dev.search.model.ResultModel;
-import mikugo.dev.search.query.DynamicQueryResultFactory;
+import mikugo.dev.search.query.DynamicQueryFacetedSearchImpl;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -44,12 +45,7 @@ public class SearchProxy {
     /**
      * Recognizing pattern and initializing search
      * 
-     * @param request
-     * @param response
-     * @param pattern
-     * @param configuredAssetTypes
-     * @param maximumSearchResults
-     * @return A list of {@link ResultModel}
+     * @return Returns list of {@link ResultModel}
      */
     public List<ResultModel> search() {
 
@@ -61,8 +57,14 @@ public class SearchProxy {
 
 	} else {
 
-	    resultModelList = doIndexSearch(request, response, pattern,
-		    Utils.filterIndexTypes(settings.getConfiguredAssetTypes()));
+	    try {
+		resultModelList = new CombinedSearchImpl(request, pattern, Utils.filterIndexTypes(settings
+			.getConfiguredAssetTypes()), settings.getMaximumSearchResults(), response).getResult();
+	    } catch (SearchException e) {
+		log.error(e);
+	    } catch (Exception e) {
+		log.error(e);
+	    }
 
 	}
 
@@ -77,8 +79,6 @@ public class SearchProxy {
      * @param request
      * @param response
      * @param pattern
-     * @param maximumSearchResults
-     * @param configuredAssetTypes
      * @return A list of {@link ResultModel}
      */
     private List<ResultModel> doFacetedSearch(ResourceRequest request, ResourceResponse response, String pattern) {
@@ -111,8 +111,6 @@ public class SearchProxy {
      * 
      * @param request
      * @param pattern
-     * @param maximumSearchResults
-     * @param resultModelList
      * @param searchType
      * @return A list of {@link ResultModel}
      */
@@ -121,7 +119,7 @@ public class SearchProxy {
 	List<ResultModel> resultModelList = new ArrayList<ResultModel>();
 
 	try {
-	    resultModelList = new DynamicQueryResultFactory(AssetTypes.getClassName(searchType),
+	    resultModelList = new DynamicQueryFacetedSearchImpl(AssetTypes.getClassName(searchType),
 		    settings.getMaximumSearchResults(), Utils.getThemeDisplay(request), pattern).getResult();
 	} catch (SearchException e) {
 	    log.error(e);
@@ -138,7 +136,6 @@ public class SearchProxy {
      * @param response
      * @param pattern
      * @param assetTypes
-     * @param resultModelList
      * @return A list of {@link ResultModel}
      */
     private List<ResultModel> doIndexSearch(ResourceRequest request, ResourceResponse response, String pattern,
